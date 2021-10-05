@@ -95,8 +95,8 @@ function MainScreen({offersNumber}: MainScreenProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                {new Array(offersNumber).fill('', 0, offersNumber).map((item, i) => (
-                  <PlaceCard key={Math.random()}/>
+                {new Array(offersNumber).fill('', 0, offersNumber).map((item) => (
+                  <PlaceCard key={item}/>
                 ))}
               </div>
             </section>
