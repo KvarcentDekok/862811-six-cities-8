@@ -39,16 +39,22 @@ function ReviewForm({onReview}: ReviewFormProps): JSX.Element {
 
   const {rating, review} = formControls;
 
-  return (
-    <form className="reviews__form form" action="#" method="post"
-      onSubmit={(evt: FormEvent<HTMLFormElement>) => {
-        evt.preventDefault();
-        onReview(formControls);
-        setFormControls({rating: '', review: ''});
-      }}
-    >
-      <label className="reviews__label form__label" htmlFor="review">Your review</label>
-      <div className="reviews__rating-form form__rating">
+  function onSubmitReviewForm(evt: FormEvent<HTMLFormElement>) {
+    evt.preventDefault();
+    onReview(formControls);
+    setFormControls({rating: '', review: ''});
+  }
+
+  function onChangeReview({target}: ChangeEvent<HTMLTextAreaElement>) {
+    setFormControls({
+      ...formControls,
+      review: target.value,
+    });
+  }
+
+  function renderRating(): JSX.Element {
+    return (
+      <>
         {ratingValues.map((ratingItem) => (
           <>
             <input className="form__rating-input visually-hidden" name="rating" value={ratingItem.value} id={`${ratingItem.value}-stars`} type="radio"
@@ -67,15 +73,21 @@ function ReviewForm({onReview}: ReviewFormProps): JSX.Element {
             </label>
           </>
         ))}
+      </>
+    );
+  }
+
+  return (
+    <form className="reviews__form form" action="#" method="post"
+      onSubmit={onSubmitReviewForm}
+    >
+      <label className="reviews__label form__label" htmlFor="review">Your review</label>
+      <div className="reviews__rating-form form__rating">
+        {renderRating()}
       </div>
       <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved"
         value={review}
-        onChange={({target}: ChangeEvent<HTMLTextAreaElement>) => {
-          setFormControls({
-            ...formControls,
-            review: target.value,
-          });
-        }}
+        onChange={onChangeReview}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">

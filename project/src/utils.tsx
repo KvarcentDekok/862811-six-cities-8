@@ -8,10 +8,10 @@ export function makeFirstLetterUppercase(string: string): string {
   return string[0].toUpperCase() + string.slice(1);
 }
 
-export function getISOString(date: Date): string {
+export function getISOString(date: string): string {
   return dayjs(date).toISOString();
 }
 
-export function formatDate(date: Date): string {
+export function formatDate(date: string): string {
   return dayjs(date).format('MMMM YYYY');
 }

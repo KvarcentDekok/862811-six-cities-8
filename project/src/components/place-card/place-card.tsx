@@ -10,17 +10,9 @@ type PlaceCardProps = {
 
 function PlaceCard({offer, onPlaceHover}: PlaceCardProps): JSX.Element {
   const {
-    //bedrooms,
-    //city,
-    //description,
-    //goods,
-    //host,
     id,
-    //images,
     isFavorite,
     isPremium,
-    //location,
-    //maxAdults,
     previewImage,
     price,
     rating,
@@ -37,7 +29,7 @@ function PlaceCard({offer, onPlaceHover}: PlaceCardProps): JSX.Element {
         </div>
       }
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <Link to={`offer/${offer.id}`}>
+        <Link to={`offer/${id}`}>
           <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image"/>
         </Link>
       </div>
@@ -61,7 +53,7 @@ function PlaceCard({offer, onPlaceHover}: PlaceCardProps): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`offer/${offer.id}`}>{title}</Link>
+          <Link to={`offer/${id}`}>{title}</Link>
         </h2>
         <p className="place-card__type">{makeFirstLetterUppercase(type)}</p>
       </div>
