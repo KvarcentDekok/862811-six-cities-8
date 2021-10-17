@@ -10,16 +10,10 @@ type PlacesListProps = {
 function PlacesList({offers}: PlacesListProps): JSX.Element {
   const [, setActiveOfferId] = useState(0);
 
-  function renderCards(): JSX.Element {
-    return (
-      <>
-        {
-          offers.map((offer) => (
-            <PlaceCard key={offer.id} offer={offer} onPlaceHover={(id: number) => setActiveOfferId(id)}/>
-          ))
-        }
-      </>
-    );
+  function renderCards() {
+    return offers.map((offer) => (
+      <PlaceCard key={offer.id} offer={offer} onPlaceHover={(id: number) => setActiveOfferId(id)}/>
+    ));
   }
 
   return (
