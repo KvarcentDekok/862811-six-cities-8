@@ -5,10 +5,11 @@ import { getPercentageOfRating, makeFirstLetterUppercase } from '../../utils';
 
 type PlaceCardProps = {
   offer: Offer,
-  onPlaceHover: (id: number) => void
+  onPlaceHover: (id: number) => void,
+  onPlaceLeave: () => void
 }
 
-function PlaceCard({offer, onPlaceHover}: PlaceCardProps): JSX.Element {
+function PlaceCard({offer, onPlaceHover, onPlaceLeave}: PlaceCardProps): JSX.Element {
   const {
     id,
     isFavorite,
@@ -21,7 +22,7 @@ function PlaceCard({offer, onPlaceHover}: PlaceCardProps): JSX.Element {
   } = offer;
 
   return (
-    <article className="cities__place-card place-card" onMouseOver={() => onPlaceHover(id)}>
+    <article className="cities__place-card place-card" onMouseEnter={() => onPlaceHover(id)} onMouseLeave={() => onPlaceLeave()}>
       {
         isPremium &&
         <div className="place-card__mark">
