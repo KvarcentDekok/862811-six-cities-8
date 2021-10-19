@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PlacesList from '../places-list/places-list';
 import { Offer } from '../../types/offer';
 import Header from '../header/header';
+import Map from '../map/map';
 
 type MainScreenProps = {
   offers: Offer[];
 }
 
 function MainScreen({offers}: MainScreenProps): JSX.Element {
+  const [activeOfferId, setActiveOfferId] = useState(0);
+
   return (
     <div className="page page--gray page--main">
       <Header/>
@@ -70,10 +73,10 @@ function MainScreen({offers}: MainScreenProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <PlacesList offers={offers}/>
+              <PlacesList offers={offers} onPlaceHover={(id: number) => setActiveOfferId(id)} onPlaceLeave={() =>setActiveOfferId(0)}/>
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <Map offers={offers} activeOfferId={activeOfferId}/>
             </div>
           </div>
         </div>
