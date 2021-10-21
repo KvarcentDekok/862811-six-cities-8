@@ -19,6 +19,8 @@ function useMap(
       },
     );
 
+    map?.flyTo([currentCity.location.latitude, currentCity.location.longitude]);
+
     if (mapRef.current !== null && map === null) {
       const instance = leaflet.map(mapRef.current, {
         center: {

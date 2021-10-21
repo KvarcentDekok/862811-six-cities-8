@@ -22,4 +22,4 @@ const reducer = (state: State = initialState, action: Actions): State => {
   }
 };
 
-export {reducer};
+export default reducer;

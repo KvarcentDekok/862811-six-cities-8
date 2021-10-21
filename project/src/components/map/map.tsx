@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import leaflet, { Marker } from 'leaflet';
+import leaflet, { LayerGroup, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import useMap from '../../hooks/useMap';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
@@ -28,7 +28,8 @@ const mapStateToProps = ({city, offers}: State) => ({
 });
 
 const connector = connect(mapStateToProps);
-const markers: Marker[] = [];
+
+let markersGroup: LayerGroup;
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & MapProps;
@@ -39,8 +40,9 @@ function Map({ offers, currentCity, activeOfferId }: ConnectedComponentProps): J
 
   useEffect(() => {
     if (map) {
-      map.flyTo([currentCity.location.latitude, currentCity.location.longitude]);
-      markers.forEach((marker) => marker.remove());
+      const markers: Marker[] = [];
+
+      markersGroup?.remove();
 
       offers.forEach((offer, i) => {
         markers.push(new Marker({
@@ -48,10 +50,11 @@ function Map({ offers, currentCity, activeOfferId }: ConnectedComponentProps): J
           lng: offer.location.longitude,
         }));
 
-        markers[i]
-          .setIcon(offer.id === activeOfferId ? currentCustomIcon : defaultCustomIcon)
-          .addTo(map);
+        markers[i].setIcon(offer.id === activeOfferId ? currentCustomIcon : defaultCustomIcon);
       });
+
+      markersGroup = leaflet.layerGroup([...markers]);
+      markersGroup.addTo(map);
     }
   }, [map, offers, activeOfferId, currentCity]);
 

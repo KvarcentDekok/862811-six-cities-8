@@ -20,7 +20,7 @@ function FavoritesScreen({ offers }: FavoritesScreenProps): JSX.Element {
     return uniqueCities.map((cityName: string) => (
       <LocationFavorite key={cityName} cityName={cityName}>
         <>
-          {offers
+          {favoriteOffers
             .filter((offer: Offer) => offer.city.name === cityName)
             .map((offer: Offer) => (
               <PlaceCardFavorite key={offer.id} offer={offer} />
