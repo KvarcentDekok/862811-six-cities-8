@@ -28,8 +28,7 @@ const mapStateToProps = ({city, offers}: State) => ({
 });
 
 const connector = connect(mapStateToProps);
-
-let markersGroup: LayerGroup;
+const markersGroup: LayerGroup = leaflet.layerGroup([]);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & MapProps;
@@ -42,7 +41,7 @@ function Map({ offers, currentCity, activeOfferId }: ConnectedComponentProps): J
     if (map) {
       const markers: Marker[] = [];
 
-      markersGroup?.remove();
+      markersGroup?.clearLayers();
 
       offers.forEach((offer, i) => {
         markers.push(new Marker({
@@ -51,9 +50,9 @@ function Map({ offers, currentCity, activeOfferId }: ConnectedComponentProps): J
         }));
 
         markers[i].setIcon(offer.id === activeOfferId ? currentCustomIcon : defaultCustomIcon);
+        markersGroup.addLayer(markers[i]);
       });
 
-      markersGroup = leaflet.layerGroup([...markers]);
       markersGroup.addTo(map);
     }
   }, [map, offers, activeOfferId, currentCity]);
