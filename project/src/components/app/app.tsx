@@ -6,15 +6,40 @@ import RoomScreen from '../room-screen/room-screen';
 import SignInScreen from '../sign-in-screen/sign-in-screen';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import PrivateRoute from '../private-route/private-route';
-import { Offer } from '../../types/offer';
 import { Review } from '../../types/review';
+import { State } from '../../types/state';
+import { connect, ConnectedProps } from 'react-redux';
+import { SpinnerDotted } from 'spinners-react';
+import { CSSProperties } from 'react';
 
 type AppProps = {
-  offers: Offer[],
   reviews: Review[]
 }
 
-function App({offers, reviews}: AppProps): JSX.Element {
+const mapStateToProps = ({offers, isDataLoaded}: State) => ({
+  offers,
+  isDataLoaded,
+});
+
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & AppProps;
+
+function App({offers, reviews, isDataLoaded}: ConnectedComponentProps): JSX.Element {
+  if (!isDataLoaded) {
+    const spinnerStyles: CSSProperties = {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+    };
+
+    return (
+      <SpinnerDotted color='#4481c3' style={spinnerStyles} size={100}/>
+    );
+  }
+
   return (
     <BrowserRouter>
       <Switch>
@@ -42,4 +67,5 @@ function App({offers, reviews}: AppProps): JSX.Element {
   );
 }
 
-export default App;
+export {App};
+export default connector(App);
