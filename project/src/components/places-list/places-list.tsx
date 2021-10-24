@@ -1,14 +1,23 @@
 import React from 'react';
-import { Offer } from '../../types/offer';
 import PlaceCard from '../place-card/place-card';
+import { State } from '../../types/state';
+import { connect, ConnectedProps } from 'react-redux';
 
 type PlacesListProps = {
-  offers: Offer[],
   onPlaceHover: (id: number) => void,
   onPlaceLeave: () => void
 }
 
-function PlacesList({offers, onPlaceHover, onPlaceLeave}: PlacesListProps): JSX.Element {
+const mapStateToProps = ({offers}: State) => ({
+  offers,
+});
+
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & PlacesListProps;
+
+function PlacesList({offers, onPlaceHover, onPlaceLeave}: ConnectedComponentProps): JSX.Element {
   function renderCards() {
     return offers.map((offer) => (
       <PlaceCard key={offer.id} offer={offer} onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave}/>
@@ -22,4 +31,5 @@ function PlacesList({offers, onPlaceHover, onPlaceLeave}: PlacesListProps): JSX.
   );
 }
 
-export default PlacesList;
+export {PlacesList};
+export default connector(PlacesList);

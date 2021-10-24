@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
 import PlacesList from '../places-list/places-list';
-import { Offer } from '../../types/offer';
 import Header from '../header/header';
 import Map from '../map/map';
+import CitiesList from '../cities-list/cities-list';
+import { CITIES } from '../../const';
+import { State } from '../../types/state';
+import { connect, ConnectedProps } from 'react-redux';
 
-type MainScreenProps = {
-  offers: Offer[];
-}
+const mapStateToProps = ({offers, city}: State) => ({
+  offers,
+  currentCity: city,
+});
 
-function MainScreen({offers}: MainScreenProps): JSX.Element {
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+function MainScreen({offers, currentCity}: PropsFromRedux): JSX.Element {
   const [activeOfferId, setActiveOfferId] = useState(0);
 
   return (
@@ -19,45 +27,14 @@ function MainScreen({offers}: MainScreenProps): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
-            </ul>
+            <CitiesList cities={CITIES}/>
           </section>
         </div>
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">312 places to stay in Amsterdam</b>
+              <b className="places__found">{offers.length} places to stay in {currentCity.name}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -73,10 +50,10 @@ function MainScreen({offers}: MainScreenProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <PlacesList offers={offers} onPlaceHover={(id: number) => setActiveOfferId(id)} onPlaceLeave={() =>setActiveOfferId(0)}/>
+              <PlacesList onPlaceHover={(id: number) => setActiveOfferId(id)} onPlaceLeave={() =>setActiveOfferId(0)}/>
             </section>
             <div className="cities__right-section">
-              <Map offers={offers} activeOfferId={activeOfferId}/>
+              <Map activeOfferId={activeOfferId}/>
             </div>
           </div>
         </div>
@@ -85,4 +62,5 @@ function MainScreen({offers}: MainScreenProps): JSX.Element {
   );
 }
 
-export default MainScreen;
+export {MainScreen};
+export default connector(MainScreen);
