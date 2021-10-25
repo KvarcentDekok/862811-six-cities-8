@@ -16,9 +16,9 @@ type AppProps = {
   reviews: Review[]
 }
 
-const mapStateToProps = ({offers, isDataLoaded}: State) => ({
+const mapStateToProps = ({offers, isLoading}: State) => ({
   offers,
-  isDataLoaded,
+  isLoading,
 });
 
 const connector = connect(mapStateToProps);
@@ -26,8 +26,8 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & AppProps;
 
-function App({offers, reviews, isDataLoaded}: ConnectedComponentProps): JSX.Element {
-  if (!isDataLoaded) {
+function App({offers, reviews, isLoading}: ConnectedComponentProps): JSX.Element {
+  if (isLoading) {
     const spinnerStyles: CSSProperties = {
       position: 'absolute',
       top: '50%',

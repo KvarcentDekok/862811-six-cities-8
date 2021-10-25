@@ -9,7 +9,7 @@ const initialState = {
   city: INITIAL_CITY,
   offers: [],
   allOffers: [],
-  isDataLoaded: false,
+  isLoading: true,
 };
 
 const reducer = (state: State = initialState, action: Actions): State => {
@@ -19,14 +19,20 @@ const reducer = (state: State = initialState, action: Actions): State => {
     case ActionType.FillOffers: {
       return {...state, offers: action.payload};
     }
-    case ActionType.LoadOffers: {
+    case ActionType.LoadOffersPending: {
+      return {...state, isLoading: true};
+    }
+    case ActionType.LoadOffersFulfilled: {
       const {offers} = action.payload;
       return {
         ...state,
         offers: state.offers.length ? state.offers : getOffersByCity(state.city, offers),
         allOffers: offers,
-        isDataLoaded: true,
+        isLoading: false,
       };
+    }
+    case ActionType.LoadOffersRejected: {
+      return {...state, isLoading: false};
     }
     default:
       return state;

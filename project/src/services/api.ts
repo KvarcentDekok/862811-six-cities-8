@@ -15,6 +15,7 @@ export const createAPI = (onUnauthorized: UnauthorizedCallback): AxiosInstance =
   const api = axios.create({
     baseURL: BACKEND_URL,
     timeout: REQUEST_TIMEOUT,
+    transformResponse: (data) => adaptToClientOffers(JSON.parse(data)),
   });
 
   api.interceptors.response.use(
@@ -34,7 +35,7 @@ export const createAPI = (onUnauthorized: UnauthorizedCallback): AxiosInstance =
   return api;
 };
 
-export function adaptToClientOffers(offers: OfferServer[]): Offer[] {
+function adaptToClientOffers(offers: OfferServer[]): Offer[] {
   return offers.map(({
     is_premium: isPremium,
     is_favorite: isFavorite,

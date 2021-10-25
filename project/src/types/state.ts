@@ -4,5 +4,5 @@ export type State = {
   city: City,
   offers: Offer[],
   allOffers: Offer[],
-  isDataLoaded: boolean
+  isLoading: boolean
 }

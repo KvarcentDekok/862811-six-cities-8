@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import { requireAuthorization } from './store/action';
 import { AuthorizationStatus } from './const';
 import { ThunkAppDispatch } from './types/action';
-import { fetchOffersAction } from './store/api-actions';
+import { fetchOffersAction } from './store/action';
 import { reviews } from './mocks/reviews';
 
 const api = createAPI(
