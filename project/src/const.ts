@@ -5,6 +5,10 @@ export enum AppRoute {
   Main = '/'
 }
 
+export enum APIRoute {
+  Offers = '/hotels'
+}
+
 export enum AuthorizationStatus {
   Auth = 'AUTH',
   NoAuth = 'NO_AUTH',

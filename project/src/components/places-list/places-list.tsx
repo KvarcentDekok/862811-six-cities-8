@@ -8,8 +8,10 @@ type PlacesListProps = {
   onPlaceLeave: () => void
 }
 
-const mapStateToProps = ({offers}: State) => ({
+const mapStateToProps = ({allOffers, offers, city}: State) => ({
+  allOffers,
   offers,
+  city,
 });
 
 const connector = connect(mapStateToProps);
