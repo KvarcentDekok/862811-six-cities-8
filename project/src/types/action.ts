@@ -5,11 +5,13 @@ import {
   changeCity,
   fillOffers,
   requireAuthorization,
-  loadOffersPending
+  loadOffersPending,
+  loadOffersFulfilled,
+  loadOffersRejected,
+  redirectToRoute
 } from '../store/action';
 
 import { State } from './state';
-import { loadOffersFulfilled, loadOffersRejected } from '../store/action';
 
 export enum ActionType {
   ChangeCity = 'main/changeCity',
@@ -29,7 +31,8 @@ export type Actions =
   | ReturnType<typeof loadOffersPending>
   | ReturnType<typeof loadOffersFulfilled>
   | ReturnType<typeof loadOffersRejected>
-  | ReturnType<typeof requireAuthorization>;
+  | ReturnType<typeof requireAuthorization>
+  | ReturnType<typeof redirectToRoute>;
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Actions>;
 export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Actions>;

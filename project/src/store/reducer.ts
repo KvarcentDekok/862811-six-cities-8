@@ -1,6 +1,6 @@
 import { State } from '../types/state';
 import { Actions, ActionType } from '../types/action';
-import { CITIES } from '../const';
+import { CITIES, AuthorizationStatus } from '../const';
 import { getOffersByCity } from '../offers';
 
 const INITIAL_CITY = CITIES[0];
@@ -10,6 +10,8 @@ const initialState = {
   offers: [],
   allOffers: [],
   isLoading: true,
+  authorizationStatus: AuthorizationStatus.Unknown,
+  authInfo: null,
 };
 
 const reducer = (state: State = initialState, action: Actions): State => {
@@ -34,6 +36,15 @@ const reducer = (state: State = initialState, action: Actions): State => {
     case ActionType.LoadOffersRejected: {
       return {...state, isLoading: false};
     }
+    case ActionType.RequireAuthorization:
+      return {
+        ...state,
+        authorizationStatus: action.payload.authStatus,
+        authInfo: action.payload.avatarUrl && action.payload.userEmail ? {
+          avatarUrl: action.payload.avatarUrl,
+          email: action.payload.userEmail,
+        }: null,
+      };
     default:
       return state;
   }

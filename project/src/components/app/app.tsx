@@ -1,5 +1,5 @@
-import {Switch, Route, BrowserRouter} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus} from '../../const';
+import {Switch, Route, Router as BrowserRouter} from 'react-router-dom';
+import {AppRoute} from '../../const';
 import MainScreen from '../main-screen/main-screen';
 import FavoritesScreen from '../favorites-screen/favorites-screen';
 import RoomScreen from '../room-screen/room-screen';
@@ -11,6 +11,7 @@ import { State } from '../../types/state';
 import { connect, ConnectedProps } from 'react-redux';
 import { SpinnerDotted } from 'spinners-react';
 import { CSSProperties } from 'react';
+import browserHistory from '../../browser-history';
 
 type AppProps = {
   reviews: Review[]
@@ -41,7 +42,7 @@ function App({offers, reviews, isLoading}: ConnectedComponentProps): JSX.Element
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.Main}>
           <MainScreen/>
@@ -56,7 +57,6 @@ function App({offers, reviews, isLoading}: ConnectedComponentProps): JSX.Element
           exact
           path={AppRoute.Favorites}
           render={() => <FavoritesScreen offers={offers}/>}
-          authorizationStatus={AuthorizationStatus.Auth}
         >
         </PrivateRoute>
         <Route>
