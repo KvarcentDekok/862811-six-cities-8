@@ -1,12 +1,12 @@
 import React, { FormEvent, useRef } from 'react';
 import { ThunkAppDispatch } from '../../types/action';
 import { AuthData } from '../../types/auth-data';
-import { loginAction } from '../../store/action';
+import { login } from '../../store/action';
 import { connect, ConnectedProps } from 'react-redux';
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
   onSubmit(authData: AuthData) {
-    dispatch(loginAction(authData));
+    dispatch(login(authData));
   },
 });
 

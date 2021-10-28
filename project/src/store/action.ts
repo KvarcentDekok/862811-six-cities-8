@@ -1,9 +1,7 @@
-import { ActionType, ThunkActionResult } from '../types/action';
-import { Offer, City, OfferServer } from '../types/offer';
-import { AuthorizationStatus, APIRoute, AppRoute } from '../const';
+import { ActionType } from '../types/action';
+import { Offer, City } from '../types/offer';
+import { AuthorizationStatus, AppRoute } from '../const';
 import { AuthData } from '../types/auth-data';
-import { Token, saveToken } from '../services/token';
-import { adaptToClientOffers } from '../services/api';
 
 export const changeCity = (city: City) => ({
   type: ActionType.ChangeCity,
@@ -44,33 +42,18 @@ export const redirectToRoute = (url: AppRoute) => ({
   payload: url,
 } as const);
 
-export const fetchOffersAction = (): ThunkActionResult =>
-  async (dispatch, _getState, api): Promise<void> => {
-    let data;
+export const checkAuth = () => ({
+  type: ActionType.CheckAuth,
+} as const);
 
-    dispatch(loadOffersPending());
+export const fetchOffers = () => ({
+  type: ActionType.FetchOffers,
+} as const);
 
-    try {
-      data = await (await api.get<OfferServer[]>(APIRoute.Offers)).data;
-    } catch {
-      dispatch(loadOffersRejected());
-    }
-
-    if (data) {
-      dispatch(loadOffersFulfilled(adaptToClientOffers(data)));
-    }
-  };
-
-export const checkAuthAction = (): ThunkActionResult =>
-  async (dispatch, _getState, api) => {
-    const {data: {avatar_url: avatarUrl, email: userEmail}} = await api.get<{'avatar_url': string, email: string}>(APIRoute.Login);
-    dispatch(requireAuthorization(AuthorizationStatus.Auth, avatarUrl, userEmail));
-  };
-
-export const loginAction = ({login: email, password}: AuthData): ThunkActionResult =>
-  async (dispatch, _getState, api) => {
-    const {data: {token, avatar_url: avatarUrl, email: userEmail}} = await api.post<{token: Token, 'avatar_url': string, email: string}>(APIRoute.Login, {email, password});
-    saveToken(token);
-    dispatch(requireAuthorization(AuthorizationStatus.Auth, avatarUrl, userEmail));
-    dispatch(redirectToRoute(AppRoute.Main));
-  };
+export const login = ({login: email, password}: AuthData) => ({
+  type: ActionType.Login,
+  payload: {
+    email,
+    password,
+  },
+} as const);
