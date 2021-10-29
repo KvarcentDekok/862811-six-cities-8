@@ -8,7 +8,6 @@ import {
   loadOffersPending,
   loadOffersFulfilled,
   loadOffersRejected,
-  redirectToRoute,
   checkAuth,
   fetchOffers,
   login
@@ -24,7 +23,6 @@ export enum ActionType {
   LoadOffersFulfilled = 'data/loadOffers/fulfilled',
   LoadOffersRejected = 'data/loadOffers/rejected',
   RequireAuthorization = 'user/requireAuthorization',
-  RedirectToRoute = 'API/redirectToRoute',
   CheckAuth = 'API/checkAuth',
   FetchOffers = 'API/fetchOffers',
   Login = 'API/login'
@@ -37,7 +35,6 @@ export type Actions =
   | ReturnType<typeof loadOffersFulfilled>
   | ReturnType<typeof loadOffersRejected>
   | ReturnType<typeof requireAuthorization>
-  | ReturnType<typeof redirectToRoute>
   | ReturnType<typeof checkAuth>
   | ReturnType<typeof fetchOffers>
   | ReturnType<typeof login>;
