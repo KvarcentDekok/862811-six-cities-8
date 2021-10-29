@@ -11,6 +11,10 @@ import browserHistory from '../../browser-history';
 
 type Reducer = ReturnType<typeof reducer>;
 
+enum HttpCode {
+  Unauthorized = 401,
+}
+
 function createFetchMiddleware(api: AxiosInstance): Middleware<unknown, Reducer> {
   return ({ dispatch }) => (next) => async (action) => {
     if (!action.type.startsWith('API/')) {
@@ -25,7 +29,12 @@ function createFetchMiddleware(api: AxiosInstance): Middleware<unknown, Reducer>
               AuthorizationStatus.Auth,
               response.data.avatar_url,
               response.data.email,
-            )));
+            )))
+          .catch((error) => {
+            if (error.response.status === HttpCode.Unauthorized) {
+              dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+            }
+          });
 
         break;
       case ActionType.FetchOffers:

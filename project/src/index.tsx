@@ -7,15 +7,12 @@ import { createAPI, adaptToClientReviews } from './services/api';
 import reducer from './store/reducer';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import { Provider } from 'react-redux';
-import { checkAuth, fetchOffers, requireAuthorization } from './store/action';
+import { checkAuth, fetchOffers } from './store/action';
 import { ThunkAppDispatch } from './types/action';
 import { reviews } from './mocks/reviews';
 import { fetchMiddleware } from './store/middlewares/fetch-middleware';
-import { AuthorizationStatus } from './const';
 
-const api = createAPI(
-  () => store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth)),
-);
+const api = createAPI();
 
 const store = createStore(
   reducer,
