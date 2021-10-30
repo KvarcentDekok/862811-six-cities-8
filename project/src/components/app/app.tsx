@@ -7,27 +7,20 @@ import SignInScreen from '../sign-in-screen/sign-in-screen';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import PrivateRoute from '../private-route/private-route';
 import { Review } from '../../types/review';
-import { State } from '../../types/state';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { SpinnerDotted } from 'spinners-react';
 import { CSSProperties } from 'react';
 import browserHistory from '../../browser-history';
+import { getOffers, getLoadingFlag } from '../../store/data/selectors';
 
 type AppProps = {
   reviews: Review[]
 }
 
-const mapStateToProps = ({offers, isLoading}: State) => ({
-  offers,
-  isLoading,
-});
+function App({reviews}: AppProps): JSX.Element {
+  const offers = useSelector(getOffers);
+  const isLoading = useSelector(getLoadingFlag);
 
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & AppProps;
-
-function App({offers, reviews, isLoading}: ConnectedComponentProps): JSX.Element {
   if (isLoading) {
     const spinnerStyles: CSSProperties = {
       position: 'absolute',
@@ -67,5 +60,4 @@ function App({offers, reviews, isLoading}: ConnectedComponentProps): JSX.Element
   );
 }
 
-export {App};
-export default connector(App);
+export default App;

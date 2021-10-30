@@ -4,20 +4,24 @@ import Header from '../header/header';
 import Map from '../map/map';
 import CitiesList from '../cities-list/cities-list';
 import { CITIES } from '../../const';
-import { State } from '../../types/state';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { getOffers } from '../../store/data/selectors';
+import { getCity } from '../../store/main/selectors';
 
-const mapStateToProps = ({offers, city}: State) => ({
-  offers,
-  currentCity: city,
-});
-
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function MainScreen({offers, currentCity}: PropsFromRedux): JSX.Element {
+function MainScreen(): JSX.Element {
+  const offers = useSelector(getOffers);
+  const currentCity = useSelector(getCity);
   const [activeOfferId, setActiveOfferId] = useState(0);
+
+  const onPlaceHover = React.useCallback(
+    (id: number) => setActiveOfferId(id),
+    [],
+  );
+
+  const onPlaceLeave = React.useCallback(
+    () =>setActiveOfferId(0),
+    [],
+  );
 
   return (
     <div className="page page--gray page--main">
@@ -50,7 +54,7 @@ function MainScreen({offers, currentCity}: PropsFromRedux): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <PlacesList onPlaceHover={(id: number) => setActiveOfferId(id)} onPlaceLeave={() =>setActiveOfferId(0)}/>
+              <PlacesList onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave}/>
             </section>
             <div className="cities__right-section">
               <Map activeOfferId={activeOfferId}/>
@@ -62,5 +66,4 @@ function MainScreen({offers, currentCity}: PropsFromRedux): JSX.Element {
   );
 }
 
-export {MainScreen};
-export default connector(MainScreen);
+export default MainScreen;

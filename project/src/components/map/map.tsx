@@ -3,8 +3,9 @@ import leaflet, { LayerGroup, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import useMap from '../../hooks/useMap';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
-import { State } from '../../types/state';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { getOffers } from '../../store/data/selectors';
+import { getCity } from '../../store/main/selectors';
 
 type MapProps = {
   activeOfferId: number
@@ -22,18 +23,11 @@ const currentCustomIcon = leaflet.icon({
   iconAnchor: [13.5, 39],
 });
 
-const mapStateToProps = ({city, offers}: State) => ({
-  currentCity: city,
-  offers,
-});
-
-const connector = connect(mapStateToProps);
 const markersGroup: LayerGroup = leaflet.layerGroup([]);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & MapProps;
-
-function Map({ offers, currentCity, activeOfferId }: ConnectedComponentProps): JSX.Element {
+function Map({ activeOfferId }: MapProps): JSX.Element {
+  const offers = useSelector(getOffers);
+  const currentCity = useSelector(getCity);
   const mapRef = useRef(null);
   const map = useMap(mapRef, currentCity);
 
@@ -60,5 +54,4 @@ function Map({ offers, currentCity, activeOfferId }: ConnectedComponentProps): J
   return <section className="cities__map map" ref={mapRef}></section>;
 }
 
-export {Map};
-export default connector(Map);
+export default Map;
