@@ -1,41 +1,33 @@
-import axios, {AxiosInstance, AxiosResponse, AxiosError} from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig} from 'axios';
 import { Offer, OfferServer } from '../types/offer';
 import { Review, ReviewServer } from '../types/review';
+import { getToken } from './token';
 
 const BACKEND_URL = 'https://8.react.pages.academy/six-cities';
 const REQUEST_TIMEOUT = 5000;
 
-enum HttpCode {
-  Unauthorized = 401,
-}
-
-type UnauthorizedCallback = () => void;
-
-export const createAPI = (onUnauthorized: UnauthorizedCallback): AxiosInstance => {
+export const createAPI = (): AxiosInstance => {
   const api = axios.create({
     baseURL: BACKEND_URL,
     timeout: REQUEST_TIMEOUT,
-    transformResponse: (data) => adaptToClientOffers(JSON.parse(data)),
   });
 
-  api.interceptors.response.use(
-    (response: AxiosResponse) => response,
+  api.interceptors.request.use(
+    (config: AxiosRequestConfig) => {
+      const token = getToken();
 
-    (error: AxiosError) => {
-      const {response} = error;
-
-      if (response?.status === HttpCode.Unauthorized) {
-        return onUnauthorized();
+      if (token) {
+        config.headers['x-token'] = token;
       }
 
-      return Promise.reject(error);
+      return config;
     },
   );
 
   return api;
 };
 
-function adaptToClientOffers(offers: OfferServer[]): Offer[] {
+export function adaptToClientOffers(offers: OfferServer[]): Offer[] {
   return offers.map(({
     is_premium: isPremium,
     is_favorite: isFavorite,

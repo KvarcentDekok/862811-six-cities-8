@@ -1,6 +1,7 @@
-import { ActionType, ThunkActionResult } from '../types/action';
+import { ActionType } from '../types/action';
 import { Offer, City } from '../types/offer';
-import { AuthorizationStatus, APIRoute } from '../const';
+import { AuthorizationStatus } from '../const';
+import { AuthData } from '../types/auth-data';
 
 export const changeCity = (city: City) => ({
   type: ActionType.ChangeCity,
@@ -27,24 +28,27 @@ export const loadOffersRejected = () => ({
   type: ActionType.LoadOffersRejected,
 } as const);
 
-export const requireAuthorization = (authStatus: AuthorizationStatus) => ({
+export const requireAuthorization = (authStatus: AuthorizationStatus, avatarUrl?: string, userEmail?: string) => ({
   type: ActionType.RequireAuthorization,
-  payload: authStatus,
+  payload: {
+    authStatus,
+    avatarUrl,
+    userEmail,
+  },
 } as const);
 
-export const fetchOffersAction = (): ThunkActionResult =>
-  async (dispatch, _getState, api): Promise<void> => {
-    let data;
+export const checkAuth = () => ({
+  type: ActionType.CheckAuth,
+} as const);
 
-    dispatch(loadOffersPending());
+export const fetchOffers = () => ({
+  type: ActionType.FetchOffers,
+} as const);
 
-    try {
-      data = await (await api.get<Offer[]>(APIRoute.Offers)).data;
-    } catch {
-      dispatch(loadOffersRejected());
-    }
-
-    if (data) {
-      dispatch(loadOffersFulfilled(data));
-    }
-  };
+export const login = ({login: email, password}: AuthData) => ({
+  type: ActionType.Login,
+  payload: {
+    email,
+    password,
+  },
+} as const);
