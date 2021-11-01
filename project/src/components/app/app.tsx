@@ -11,14 +11,14 @@ import { useSelector } from 'react-redux';
 import { SpinnerDotted } from 'spinners-react';
 import { CSSProperties } from 'react';
 import browserHistory from '../../browser-history';
-import { getOffers, getLoadingFlag } from '../../store/data/selectors';
+import { getLoadingFlag, getAllOffers } from '../../store/data/selectors';
 
 type AppProps = {
   reviews: Review[]
 }
 
 function App({reviews}: AppProps): JSX.Element {
-  const offers = useSelector(getOffers);
+  const offers = useSelector(getAllOffers);
   const isLoading = useSelector(getLoadingFlag);
 
   if (isLoading) {

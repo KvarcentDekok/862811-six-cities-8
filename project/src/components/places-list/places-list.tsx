@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import PlaceCard from '../place-card/place-card';
 import { useSelector } from 'react-redux';
-import { getOffers } from '../../store/data/selectors';
+import { getOffersByCity } from '../../store/data/selectors';
 
 type PlacesListProps = {
   onPlaceHover: (id: number) => void,
@@ -9,7 +9,7 @@ type PlacesListProps = {
 }
 
 function PlacesList({onPlaceHover, onPlaceLeave}: PlacesListProps): JSX.Element {
-  const offers = useSelector(getOffers);
+  const offers = useSelector(getOffersByCity);
 
   function renderCards() {
     return offers.map((offer) => (

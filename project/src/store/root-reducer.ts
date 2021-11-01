@@ -1,7 +1,7 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { data } from './data/data';
-import { main } from './main/main';
-import { user } from './user/user';
+import data from './data/data';
+import main from './main/main';
+import user from './user/user';
 
 
 export enum NameSpace {

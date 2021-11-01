@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PlacesList from '../places-list/places-list';
 import Header from '../header/header';
 import Map from '../map/map';
 import CitiesList from '../cities-list/cities-list';
 import { CITIES } from '../../const';
 import { useSelector } from 'react-redux';
-import { getOffers } from '../../store/data/selectors';
+import { getOffersByCity } from '../../store/data/selectors';
 import { getCity } from '../../store/main/selectors';
 
 function MainScreen(): JSX.Element {
-  const offers = useSelector(getOffers);
+  const offers = useSelector(getOffersByCity);
   const currentCity = useSelector(getCity);
   const [activeOfferId, setActiveOfferId] = useState(0);
 
-  const onPlaceHover = React.useCallback(
+  const onPlaceHover = useCallback(
     (id: number) => setActiveOfferId(id),
     [],
   );
 
-  const onPlaceLeave = React.useCallback(
-    () =>setActiveOfferId(0),
+  const onPlaceLeave = useCallback(
+    () => setActiveOfferId(0),
     [],
   );
 

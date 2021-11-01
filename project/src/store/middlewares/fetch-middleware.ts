@@ -3,12 +3,12 @@ import { Middleware } from 'redux';
 import { ActionType } from '../../types/action';
 import { AxiosInstance } from 'axios';
 import { APIRoute, AuthorizationStatus, AppRoute } from '../../const';
-import { requireAuthorization, loadOffersPending, loadOffersRejected, loadOffersFulfilled, fillOffers } from '../action';
 import { OfferServer } from '../../types/offer';
-import { adaptToClientOffers } from '../../services/api';
 import { saveToken } from '../../services/token';
 import browserHistory from '../../browser-history';
-import { getOffersByCity } from '../../offers';
+import { requireAuthorization } from '../user/user';
+import { loadOffersFulfilled, loadOffersPending, loadOffersRejected } from '../data/data';
+import { nanoid } from '@reduxjs/toolkit';
 
 type Reducer = ReturnType<typeof rootReducer>;
 
@@ -39,18 +39,14 @@ function createFetchMiddleware(api: AxiosInstance): Middleware<unknown, Reducer>
 
         break;
       case ActionType.FetchOffers:
-        dispatch(loadOffersPending());
+        dispatch(loadOffersPending(nanoid(), api));
 
         try {
           const {data} = await api.get<OfferServer[]>(APIRoute.Offers);
 
-          dispatch(loadOffersFulfilled(adaptToClientOffers(data)));
-
-          if (!getState().DATA.offers.length) {
-            dispatch(fillOffers(getOffersByCity(getState().MAIN.city, adaptToClientOffers(data))));
-          }
+          dispatch(loadOffersFulfilled(data, nanoid(), api));
         } catch {
-          dispatch(loadOffersRejected());
+          dispatch(loadOffersRejected(null, nanoid(), api));
         }
 
         break;

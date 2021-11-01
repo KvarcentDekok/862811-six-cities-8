@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import useMap from '../../hooks/useMap';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
 import { useSelector } from 'react-redux';
-import { getOffers } from '../../store/data/selectors';
+import { getOffersByCity } from '../../store/data/selectors';
 import { getCity } from '../../store/main/selectors';
 
 type MapProps = {
@@ -26,7 +26,7 @@ const currentCustomIcon = leaflet.icon({
 const markersGroup: LayerGroup = leaflet.layerGroup([]);
 
 function Map({ activeOfferId }: MapProps): JSX.Element {
-  const offers = useSelector(getOffers);
+  const offers = useSelector(getOffersByCity);
   const currentCity = useSelector(getCity);
   const mapRef = useRef(null);
   const map = useMap(mapRef, currentCity);
