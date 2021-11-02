@@ -2,12 +2,11 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {DataState} from '../../types/state';
 import { OfferServer } from '../../types/offer';
 import { APIRoute } from '../../const';
-import { AxiosInstance } from 'axios';
-import { adaptToClientOffers } from '../../services/api';
+import { adaptToClientOffers, api } from '../../services/api';
 
 const loadOffers = createAsyncThunk(
   'data/loadOffers',
-  async (api: AxiosInstance) => {
+  async () => {
     const {data} = await api.get<OfferServer[]>(APIRoute.Offers);
     return data;
   },
@@ -38,5 +37,5 @@ const dataSlice = createSlice({
   },
 });
 
-export const {pending: loadOffersPending, fulfilled: loadOffersFulfilled, rejected: loadOffersRejected} = loadOffers;
+export {loadOffers};
 export default dataSlice.reducer;

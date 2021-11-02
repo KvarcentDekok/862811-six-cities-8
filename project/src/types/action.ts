@@ -6,7 +6,6 @@ import { State } from './state';
 
 export enum ActionType {
   CheckAuth = 'API/checkAuth',
-  FetchOffers = 'API/fetchOffers',
   Login = 'API/login'
 }
 
