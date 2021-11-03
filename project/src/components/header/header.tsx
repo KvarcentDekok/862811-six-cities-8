@@ -1,19 +1,13 @@
-import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React, { memo } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { AuthorizationStatus } from '../../const';
-import { State } from '../../types/state';
+import { getAuthorizationStatus, getAuthInfo } from '../../store/user/selectors';
 
-const mapStateToProps = ({ authorizationStatus, authInfo }: State) => ({
-  authorizationStatus,
-  authInfo,
-});
+function Header(): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const authInfo = useSelector(getAuthInfo);
 
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function Header({ authorizationStatus, authInfo }: PropsFromRedux): JSX.Element {
   return (
     <header className="header">
       <div className="container">
@@ -70,5 +64,4 @@ function Header({ authorizationStatus, authInfo }: PropsFromRedux): JSX.Element 
   );
 }
 
-export {Header};
-export default connector(Header);
+export default memo(Header);

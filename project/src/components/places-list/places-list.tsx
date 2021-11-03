@@ -1,25 +1,16 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PlaceCard from '../place-card/place-card';
-import { State } from '../../types/state';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { getOffersByCity } from '../../store/data/selectors';
 
 type PlacesListProps = {
   onPlaceHover: (id: number) => void,
   onPlaceLeave: () => void
 }
 
-const mapStateToProps = ({allOffers, offers, city}: State) => ({
-  allOffers,
-  offers,
-  city,
-});
+function PlacesList({onPlaceHover, onPlaceLeave}: PlacesListProps): JSX.Element {
+  const offers = useSelector(getOffersByCity);
 
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & PlacesListProps;
-
-function PlacesList({offers, onPlaceHover, onPlaceLeave}: ConnectedComponentProps): JSX.Element {
   function renderCards() {
     return offers.map((offer) => (
       <PlaceCard key={offer.id} offer={offer} onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave}/>
@@ -33,5 +24,4 @@ function PlacesList({offers, onPlaceHover, onPlaceLeave}: ConnectedComponentProp
   );
 }
 
-export {PlacesList};
-export default connector(PlacesList);
+export default memo(PlacesList);

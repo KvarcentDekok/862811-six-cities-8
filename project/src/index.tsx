@@ -1,29 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import { createAPI, adaptToClientReviews } from './services/api';
-import reducer from './store/reducer';
-import {composeWithDevTools} from 'redux-devtools-extension';
+import { adaptToClientReviews, api } from './services/api';
 import { Provider } from 'react-redux';
-import { checkAuth, fetchOffers } from './store/action';
-import { ThunkAppDispatch } from './types/action';
 import { reviews } from './mocks/reviews';
-import { fetchMiddleware } from './store/middlewares/fetch-middleware';
+import { rootReducer } from './store/root-reducer';
+import { configureStore } from '@reduxjs/toolkit';
+import { loadOffers } from './store/data/data';
+import { checkAuth } from './store/user/user';
 
-const api = createAPI();
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: api,
+      },
+    }),
+});
 
-const store = createStore(
-  reducer,
-  composeWithDevTools(
-    applyMiddleware(thunk.withExtraArgument(api)),
-    applyMiddleware(fetchMiddleware(api)),
-  ),
-);
-
-(store.dispatch as ThunkAppDispatch)(checkAuth());
-(store.dispatch as ThunkAppDispatch)(fetchOffers());
+store.dispatch(checkAuth());
+store.dispatch(loadOffers());
 
 ReactDOM.render(
   <React.StrictMode>
