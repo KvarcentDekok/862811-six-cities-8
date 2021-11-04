@@ -3,7 +3,7 @@ import ReviewForm from '../review-form/review-form';
 import { Offer } from '../../types/offer';
 import { useParams } from 'react-router';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
-import { getISOString, getPercentageOfRating, makeFirstLetterUppercase, formatDate } from '../../utils';
+import { getISOString, getPercentageOfRating, makeFirstLetterUppercase, formatDate } from '../../utils/utils';
 import { Review } from '../../types/review';
 import Header from '../header/header';
 

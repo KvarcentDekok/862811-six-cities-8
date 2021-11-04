@@ -1,7 +1,7 @@
 import React from 'react';
 import { Offer } from '../../types/offer';
 import { Link } from 'react-router-dom';
-import { getPercentageOfRating, makeFirstLetterUppercase } from '../../utils';
+import { getPercentageOfRating, makeFirstLetterUppercase } from '../../utils/utils';
 
 type PlaceCardProps = {
   offer: Offer,
