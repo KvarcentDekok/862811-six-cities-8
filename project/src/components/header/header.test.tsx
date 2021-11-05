@@ -10,7 +10,7 @@ const EMAIL = 'example@example.com';
 
 const mockStore = configureMockStore();
 
-describe('Component: CitiesList', () => {
+describe('Component: Header', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
     const store = mockStore({

@@ -9,7 +9,7 @@ import PrivateRoute from './private-route';
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
 
-describe('Component: PrivateRouter', () => {
+describe('Component: PrivateRoute', () => {
   beforeEach(() => {
     history.push('/private');
   });
