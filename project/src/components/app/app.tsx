@@ -1,4 +1,4 @@
-import {Switch, Route, Router as BrowserRouter} from 'react-router-dom';
+import {Switch, Route} from 'react-router-dom';
 import {AppRoute} from '../../const';
 import MainScreen from '../main-screen/main-screen';
 import FavoritesScreen from '../favorites-screen/favorites-screen';
@@ -10,7 +10,6 @@ import { Review } from '../../types/review';
 import { useSelector } from 'react-redux';
 import { SpinnerDotted } from 'spinners-react';
 import { CSSProperties } from 'react';
-import browserHistory from '../../browser-history';
 import { getLoadingFlag, getAllOffers } from '../../store/data/selectors';
 
 type AppProps = {
@@ -35,28 +34,26 @@ function App({reviews}: AppProps): JSX.Element {
   }
 
   return (
-    <BrowserRouter history={browserHistory}>
-      <Switch>
-        <Route exact path={AppRoute.Main}>
-          <MainScreen/>
-        </Route>
-        <Route exact path={AppRoute.Room}>
-          <RoomScreen offers={offers} reviews={reviews}/>
-        </Route>
-        <Route exact path={AppRoute.SignIn}>
-          <SignInScreen/>
-        </Route>
-        <PrivateRoute
-          exact
-          path={AppRoute.Favorites}
-          render={() => <FavoritesScreen offers={offers}/>}
-        >
-        </PrivateRoute>
-        <Route>
-          <NotFoundScreen/>
-        </Route>
-      </Switch>
-    </BrowserRouter>
+    <Switch>
+      <Route exact path={AppRoute.Main}>
+        <MainScreen/>
+      </Route>
+      <Route exact path={AppRoute.Room}>
+        <RoomScreen offers={offers} reviews={reviews}/>
+      </Route>
+      <Route exact path={AppRoute.SignIn}>
+        <SignInScreen/>
+      </Route>
+      <PrivateRoute
+        exact
+        path={AppRoute.Favorites}
+        render={() => <FavoritesScreen offers={offers}/>}
+      >
+      </PrivateRoute>
+      <Route>
+        <NotFoundScreen/>
+      </Route>
+    </Switch>
   );
 }
 

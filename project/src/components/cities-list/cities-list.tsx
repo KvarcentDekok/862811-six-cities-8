@@ -21,7 +21,7 @@ function CitiesList({cities}: CitiesListProps): JSX.Element {
     return cities.map((city) => (
       <li key={city.name} className="locations__item">
         <a
-          className={`locations__item-link tabs__item ${currentCity.name === city.name && 'tabs__item--active'}`}
+          className={`locations__item-link tabs__item ${currentCity.name === city.name ? 'tabs__item--active': ''}`}
           href="#"
           onClick={(evt) => onChangeCity(evt, city)}
         >

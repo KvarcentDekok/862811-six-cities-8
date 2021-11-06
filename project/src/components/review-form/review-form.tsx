@@ -1,35 +1,13 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 import {useState} from 'react';
-import { FormControls, Rating } from '../../types/review';
+import { FormControls } from '../../types/review';
+import { ratingValues } from '../../utils/utils';
 
 type ReviewFormProps = {
   onReview: (formControls: FormControls) => void;
 };
 
 const MIN_REVIEW_LENGTH = 50;
-
-const ratingValues: Rating[] = [
-  {
-    name: 'perfect',
-    value: '5',
-  },
-  {
-    name: 'good',
-    value: '4',
-  },
-  {
-    name: 'not bad',
-    value: '3',
-  },
-  {
-    name: 'badly',
-    value: '2',
-  },
-  {
-    name: 'terribly',
-    value: '1',
-  },
-];
 
 function ReviewForm({onReview}: ReviewFormProps): JSX.Element {
   const [formControls, setFormControls] = useState({
