@@ -2,14 +2,16 @@ import React from 'react';
 import { Offer } from '../../types/offer';
 import { Link } from 'react-router-dom';
 import { getPercentageOfRating, makeFirstLetterUppercase } from '../../utils/utils';
+import { ComponentName } from '../../const';
 
 type PlaceCardProps = {
   offer: Offer,
-  onPlaceHover: (id: number) => void,
-  onPlaceLeave: () => void
+  onPlaceHover?: (id: number) => void,
+  onPlaceLeave?: () => void,
+  parent: ComponentName,
 }
 
-function PlaceCard({offer, onPlaceHover, onPlaceLeave}: PlaceCardProps): JSX.Element {
+function PlaceCard({offer, onPlaceHover, onPlaceLeave, parent}: PlaceCardProps): JSX.Element {
   const {
     id,
     isFavorite,
@@ -21,16 +23,33 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave}: PlaceCardProps): JSX.Ele
     type,
   } = offer;
 
+  let conatainerClassName: string;
+  let imageWrapperClassName: string;
+
+  switch (parent) {
+    case ComponentName.MainScreen:
+      conatainerClassName = 'cities__place-card';
+      imageWrapperClassName = 'cities__image-wrapper';
+      break;
+    case ComponentName.RoomScreen:
+      conatainerClassName = 'near-places__card';
+      imageWrapperClassName = 'near-places__image-wrapper';
+  }
+
   return (
-    <article className="cities__place-card place-card" onMouseEnter={() => onPlaceHover(id)} onMouseLeave={() => onPlaceLeave()}>
+    <article
+      className={`${conatainerClassName} place-card`}
+      onMouseEnter={onPlaceHover ? () => onPlaceHover(id) : undefined}
+      onMouseLeave={onPlaceLeave ? () => onPlaceLeave() : undefined}
+    >
       {
         isPremium &&
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       }
-      <div className="cities__image-wrapper place-card__image-wrapper">
-        <Link to={`offer/${id}`}>
+      <div className={`${imageWrapperClassName} place-card__image-wrapper`}>
+        <Link to={`/offer/${id}`}>
           <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image"/>
         </Link>
       </div>

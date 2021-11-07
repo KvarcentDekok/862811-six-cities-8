@@ -1,5 +1,7 @@
-import {address, lorem, image, datatype, name} from 'faker';
+import {address, lorem, image, datatype, name, date} from 'faker';
 import { OfferServer } from '../types/offer';
+import { ReviewServer } from '../types/review';
+import { getISOString } from './utils';
 
 type FakeOfferParams = {
   cityName?: string,
@@ -40,3 +42,16 @@ export const makeFakeOffer = ({cityName, isPremium}: FakeOfferParams): OfferServ
   'title': lorem.words(),
   'type': 'apartment',
 } as OfferServer);
+
+export const makeFakeReview = (): ReviewServer => ({
+  'comment': lorem.words(),
+  'date': getISOString(date.past().toISOString()),
+  'id': datatype.number(),
+  'rating': datatype.float(),
+  'user': {
+    'avatar_url': image.avatar(),
+    'id': datatype.number(),
+    'is_pro':  datatype.boolean(),
+    'name': name.findName(),
+  },
+} as ReviewServer);
