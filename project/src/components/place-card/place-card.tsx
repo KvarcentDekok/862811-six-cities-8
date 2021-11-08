@@ -1,17 +1,17 @@
 import React from 'react';
 import { Offer } from '../../types/offer';
 import { Link } from 'react-router-dom';
-import { getPercentageOfRating, makeFirstLetterUppercase } from '../../utils/utils';
-import { ComponentName } from '../../const';
+import { getPercentageOfRating, capitalize } from '../../utils/utils';
+import { PlaceCardVariant } from '../../const';
 
 type PlaceCardProps = {
   offer: Offer,
   onPlaceHover?: (id: number) => void,
   onPlaceLeave?: () => void,
-  parent: ComponentName,
+  variant: PlaceCardVariant,
 }
 
-function PlaceCard({offer, onPlaceHover, onPlaceLeave, parent}: PlaceCardProps): JSX.Element {
+function PlaceCard({offer, onPlaceHover, onPlaceLeave, variant}: PlaceCardProps): JSX.Element {
   const {
     id,
     isFavorite,
@@ -26,12 +26,12 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave, parent}: PlaceCardProps):
   let conatainerClassName: string;
   let imageWrapperClassName: string;
 
-  switch (parent) {
-    case ComponentName.MainScreen:
+  switch (variant) {
+    case PlaceCardVariant.Cities:
       conatainerClassName = 'cities__place-card';
       imageWrapperClassName = 'cities__image-wrapper';
       break;
-    case ComponentName.RoomScreen:
+    case PlaceCardVariant.NearPlaces:
       conatainerClassName = 'near-places__card';
       imageWrapperClassName = 'near-places__image-wrapper';
   }
@@ -75,7 +75,7 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave, parent}: PlaceCardProps):
         <h2 className="place-card__name">
           <Link to={`offer/${id}`}>{title}</Link>
         </h2>
-        <p className="place-card__type">{makeFirstLetterUppercase(type)}</p>
+        <p className="place-card__type">{capitalize(type)}</p>
       </div>
     </article>
   );

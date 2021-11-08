@@ -8,13 +8,9 @@ type ReviewsProps = {
 
 function Reviews({ reviews }: ReviewsProps): JSX.Element {
   function renderReviews() {
-    return (
-      <>
-        {reviews.map((review) => (
-          <ReviewComponent key={review.id} review={review} />
-        ))}
-      </>
-    );
+    return reviews.map((review) => (
+      <ReviewComponent key={review.id} review={review} />
+    ));
   }
 
   return (

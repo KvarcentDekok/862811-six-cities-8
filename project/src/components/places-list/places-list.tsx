@@ -2,30 +2,30 @@ import React, { memo } from 'react';
 import PlaceCard from '../place-card/place-card';
 import { useSelector } from 'react-redux';
 import { getOffersByCity, getOffersNearby } from '../../store/data/selectors';
-import { ComponentName } from '../../const';
+import { PlaceCardVariant } from '../../const';
 
 type PlacesListProps = {
   onPlaceHover?: (id: number) => void,
   onPlaceLeave?: () => void,
-  parent: ComponentName,
+  variant: PlaceCardVariant,
 }
 
-function PlacesList({onPlaceHover, onPlaceLeave, parent}: PlacesListProps): JSX.Element {
-  const offers = useSelector(parent === ComponentName.MainScreen ? getOffersByCity : getOffersNearby);
+function PlacesList({onPlaceHover, onPlaceLeave, variant}: PlacesListProps): JSX.Element {
+  const offers = useSelector(variant === PlaceCardVariant.Cities ? getOffersByCity : getOffersNearby);
 
   let conatainerClassName: string;
 
   function renderCards() {
     return offers.map((offer) => (
-      <PlaceCard key={offer.id} offer={offer} onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave} parent={parent}/>
+      <PlaceCard key={offer.id} offer={offer} onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave} variant={variant}/>
     ));
   }
 
-  switch (parent) {
-    case ComponentName.MainScreen:
+  switch (variant) {
+    case PlaceCardVariant.Cities:
       conatainerClassName = 'cities__places-list';
       break;
-    case ComponentName.RoomScreen:
+    case PlaceCardVariant.NearPlaces:
       conatainerClassName = 'near-places__list';
   }
 

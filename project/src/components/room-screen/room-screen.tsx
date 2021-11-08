@@ -1,12 +1,12 @@
 import { Offer } from '../../types/offer';
 import { useParams } from 'react-router';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
-import { getPercentageOfRating, makeFirstLetterUppercase } from '../../utils/utils';
+import { getPercentageOfRating, capitalize } from '../../utils/utils';
 import { Review } from '../../types/review';
 import Header from '../header/header';
 import Reviews from '../reviews/reviews';
 import Map from '../map/map';
-import { MapContainerClassName, ComponentName } from '../../const';
+import { MapContainerClassName, PlaceCardVariant } from '../../const';
 import { useDispatch } from 'react-redux';
 import { changeCity } from '../../store/main/main';
 import { loadOffersNearby } from '../../store/data/data';
@@ -106,7 +106,7 @@ function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
               </div>
               <ul className="property__features">
                 <li className="property__feature property__feature--entire">
-                  {makeFirstLetterUppercase(type)}
+                  {capitalize(type)}
                 </li>
                 <li className="property__feature property__feature--bedrooms">
                   {bedrooms} Bedrooms
@@ -160,7 +160,7 @@ function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
             <h2 className="near-places__title">
                 Other places in the neighbourhood
             </h2>
-            <PlacesList parent={ComponentName.RoomScreen} />
+            <PlacesList variant={PlaceCardVariant.NearPlaces} />
           </section>
         </div>
       </main>

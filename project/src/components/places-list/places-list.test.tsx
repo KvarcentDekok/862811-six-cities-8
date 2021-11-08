@@ -4,7 +4,7 @@ import {createMemoryHistory} from 'history';
 import PlacesList from './places-list';
 import { Provider } from 'react-redux';
 import { configureMockStore } from '@jedmao/redux-mock-store';
-import { CITIES, ComponentName } from '../../const';
+import { CITIES, PlaceCardVariant } from '../../const';
 import { adaptToClientOffers } from '../../services/api';
 import { makeFakeOffer } from '../../utils/mocks';
 
@@ -23,7 +23,7 @@ describe('Component: PlacesList', () => {
     const {queryAllByAltText} = render(
       <Provider store={store}>
         <Router history={history}>
-          <PlacesList onPlaceHover={jest.fn()} onPlaceLeave={jest.fn()} parent={ComponentName.MainScreen} />
+          <PlacesList onPlaceHover={jest.fn()} onPlaceLeave={jest.fn()} variant={PlaceCardVariant.Cities} />
         </Router>
       </Provider>,
     );

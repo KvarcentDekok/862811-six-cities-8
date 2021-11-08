@@ -75,7 +75,7 @@ export enum MapContainerClassName {
   Property = 'property__map'
 }
 
-export enum ComponentName {
-  RoomScreen = 'room-screen',
-  MainScreen = 'main-screen'
+export enum PlaceCardVariant {
+  Cities = 'cities',
+  NearPlaces = 'near-places'
 }

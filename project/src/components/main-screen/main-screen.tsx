@@ -3,7 +3,7 @@ import PlacesList from '../places-list/places-list';
 import Header from '../header/header';
 import Map from '../map/map';
 import CitiesList from '../cities-list/cities-list';
-import { CITIES, MapContainerClassName, ComponentName } from '../../const';
+import { CITIES, MapContainerClassName, PlaceCardVariant } from '../../const';
 import { useSelector } from 'react-redux';
 import { getOffersByCity } from '../../store/data/selectors';
 import { getCity } from '../../store/main/selectors';
@@ -54,7 +54,7 @@ function MainScreen(): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <PlacesList onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave} parent={ComponentName.MainScreen}/>
+              <PlacesList onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave} variant={PlaceCardVariant.Cities}/>
             </section>
             <div className="cities__right-section">
               <Map containerClassName={MapContainerClassName.Cities} activeOfferId={activeOfferId}/>
