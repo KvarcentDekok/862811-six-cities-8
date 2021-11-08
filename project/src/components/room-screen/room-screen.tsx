@@ -27,10 +27,10 @@ function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
 
   useEffect(() => {
     if (offer) {
-      dispatch(changeCity(city));
-      dispatch(loadOffersNearby(id));
+      dispatch(changeCity(offer.city));
+      dispatch(loadOffersNearby(String(offer.id)));
     }
-  });
+  }, [dispatch, offer]);
 
   if (!offer) {
     return (<NotFoundScreen/>);
@@ -49,7 +49,6 @@ function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
     rating,
     title,
     type,
-    city,
   } = offer;
 
   return (
