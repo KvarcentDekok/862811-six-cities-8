@@ -14,7 +14,7 @@ const mockStore = configureMockStore();
 const offers = adaptToClientOffers(new Array(NUMBER_OF_OFFERS).fill(makeFakeOffer({cityName: CITIES[0].name})));
 
 const store = mockStore({
-  DATA: {allOffers: offers},
+  DATA: {allOffers: offers, offersNearby: offers},
   MAIN: {city: CITIES[0]},
   USER: {authorizationStatus: AuthorizationStatus.Auth},
 });

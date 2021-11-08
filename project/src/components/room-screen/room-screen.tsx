@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { changeCity } from '../../store/main/main';
 import { loadOffersNearby } from '../../store/data/data';
 import PlacesList from '../places-list/places-list';
+import { useEffect } from 'react';
 
 type RoomScreenProps = {
   offers: Offer[],
@@ -23,6 +24,13 @@ function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const offer: PossibleOffer = offers.find((item) => item.id === Number(id));
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (offer) {
+      dispatch(changeCity(city));
+      dispatch(loadOffersNearby(id));
+    }
+  });
 
   if (!offer) {
     return (<NotFoundScreen/>);
@@ -43,9 +51,6 @@ function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
     type,
     city,
   } = offer;
-
-  dispatch(changeCity(city));
-  dispatch(loadOffersNearby(id));
 
   return (
     <div className="page">
