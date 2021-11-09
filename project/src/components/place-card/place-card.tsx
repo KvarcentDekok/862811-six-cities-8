@@ -2,13 +2,12 @@ import React from 'react';
 import { Offer } from '../../types/offer';
 import { Link } from 'react-router-dom';
 import { getPercentageOfRating, capitalize } from '../../utils/utils';
-import { PlaceCardVariant } from '../../const';
 
 type PlaceCardProps = {
   offer: Offer,
   onPlaceHover?: (id: number) => void,
   onPlaceLeave?: () => void,
-  variant: PlaceCardVariant,
+  variant: 'cities' | 'near-places',
 }
 
 function PlaceCard({offer, onPlaceHover, onPlaceLeave, variant}: PlaceCardProps): JSX.Element {
@@ -27,11 +26,11 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave, variant}: PlaceCardProps)
   let imageWrapperClassName: string;
 
   switch (variant) {
-    case PlaceCardVariant.Cities:
+    case 'cities':
       conatainerClassName = 'cities__place-card';
       imageWrapperClassName = 'cities__image-wrapper';
       break;
-    case PlaceCardVariant.NearPlaces:
+    case 'near-places':
       conatainerClassName = 'near-places__card';
       imageWrapperClassName = 'near-places__image-wrapper';
   }

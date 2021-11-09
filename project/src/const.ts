@@ -69,13 +69,3 @@ export const CITIES = [
     'name': 'Dusseldorf',
   },
 ];
-
-export enum MapContainerClassName {
-  Cities = 'cities__map',
-  Property = 'property__map'
-}
-
-export enum PlaceCardVariant {
-  Cities = 'cities',
-  NearPlaces = 'near-places'
-}

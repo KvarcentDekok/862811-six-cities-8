@@ -2,16 +2,15 @@ import React, { memo } from 'react';
 import PlaceCard from '../place-card/place-card';
 import { useSelector } from 'react-redux';
 import { getOffersByCity, getOffersNearby } from '../../store/data/selectors';
-import { PlaceCardVariant } from '../../const';
 
 type PlacesListProps = {
   onPlaceHover?: (id: number) => void,
   onPlaceLeave?: () => void,
-  variant: PlaceCardVariant,
+  variant: 'cities' | 'near-places',
 }
 
 function PlacesList({onPlaceHover, onPlaceLeave, variant}: PlacesListProps): JSX.Element {
-  const offers = useSelector(variant === PlaceCardVariant.Cities ? getOffersByCity : getOffersNearby);
+  const offers = useSelector(variant === 'cities' ? getOffersByCity : getOffersNearby);
 
   let conatainerClassName: string;
 
@@ -22,10 +21,10 @@ function PlacesList({onPlaceHover, onPlaceLeave, variant}: PlacesListProps): JSX
   }
 
   switch (variant) {
-    case PlaceCardVariant.Cities:
+    case 'cities':
       conatainerClassName = 'cities__places-list';
       break;
-    case PlaceCardVariant.NearPlaces:
+    case 'near-places':
       conatainerClassName = 'near-places__list';
   }
 

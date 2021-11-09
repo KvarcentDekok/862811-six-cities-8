@@ -6,7 +6,6 @@ import { Review } from '../../types/review';
 import Header from '../header/header';
 import Reviews from '../reviews/reviews';
 import Map from '../map/map';
-import { MapContainerClassName, PlaceCardVariant } from '../../const';
 import { useDispatch } from 'react-redux';
 import { changeCity } from '../../store/main/main';
 import { loadOffersNearby } from '../../store/data/data';
@@ -153,14 +152,14 @@ function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
               <Reviews reviews={reviews}/>
             </div>
           </div>
-          <Map containerClassName={MapContainerClassName.Property}/>
+          <Map containerClassName='property__map'/>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">
                 Other places in the neighbourhood
             </h2>
-            <PlacesList variant={PlaceCardVariant.NearPlaces} />
+            <PlacesList variant='near-places' />
           </section>
         </div>
       </main>

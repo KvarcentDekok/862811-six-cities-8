@@ -2,13 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import leaflet, { LayerGroup, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import useMap from '../../hooks/useMap';
-import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT, MapContainerClassName } from '../../const';
+import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
 import { useSelector } from 'react-redux';
 import { getOffersByCity, getOffersNearby } from '../../store/data/selectors';
 import { getCity } from '../../store/main/selectors';
 
 type MapProps = {
-  containerClassName: MapContainerClassName,
+  containerClassName: 'cities__map' | 'property__map',
   activeOfferId?: number
 };
 
@@ -27,7 +27,7 @@ const currentCustomIcon = leaflet.icon({
 const markersGroup: LayerGroup = leaflet.layerGroup([]);
 
 function Map({ containerClassName, activeOfferId }: MapProps): JSX.Element {
-  const offers = useSelector(containerClassName === MapContainerClassName.Cities ? getOffersByCity : getOffersNearby);
+  const offers = useSelector(containerClassName === 'cities__map' ? getOffersByCity : getOffersNearby);
   const currentCity = useSelector(getCity);
   const mapRef = useRef(null);
   const map = useMap(mapRef, currentCity);
