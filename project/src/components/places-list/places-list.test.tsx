@@ -23,7 +23,7 @@ describe('Component: PlacesList', () => {
     const {queryAllByAltText} = render(
       <Provider store={store}>
         <Router history={history}>
-          <PlacesList onPlaceHover={jest.fn()} onPlaceLeave={jest.fn()} />
+          <PlacesList onPlaceHover={jest.fn()} onPlaceLeave={jest.fn()} variant={'cities'} />
         </Router>
       </Provider>,
     );

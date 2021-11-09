@@ -1,15 +1,16 @@
 import React from 'react';
 import { Offer } from '../../types/offer';
 import { Link } from 'react-router-dom';
-import { getPercentageOfRating, makeFirstLetterUppercase } from '../../utils/utils';
+import { getPercentageOfRating, capitalize } from '../../utils/utils';
 
 type PlaceCardProps = {
   offer: Offer,
-  onPlaceHover: (id: number) => void,
-  onPlaceLeave: () => void
+  onPlaceHover?: (id: number) => void,
+  onPlaceLeave?: () => void,
+  variant: 'cities' | 'near-places',
 }
 
-function PlaceCard({offer, onPlaceHover, onPlaceLeave}: PlaceCardProps): JSX.Element {
+function PlaceCard({offer, onPlaceHover, onPlaceLeave, variant}: PlaceCardProps): JSX.Element {
   const {
     id,
     isFavorite,
@@ -21,16 +22,33 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave}: PlaceCardProps): JSX.Ele
     type,
   } = offer;
 
+  let conatainerClassName: string;
+  let imageWrapperClassName: string;
+
+  switch (variant) {
+    case 'cities':
+      conatainerClassName = 'cities__place-card';
+      imageWrapperClassName = 'cities__image-wrapper';
+      break;
+    case 'near-places':
+      conatainerClassName = 'near-places__card';
+      imageWrapperClassName = 'near-places__image-wrapper';
+  }
+
   return (
-    <article className="cities__place-card place-card" onMouseEnter={() => onPlaceHover(id)} onMouseLeave={() => onPlaceLeave()}>
+    <article
+      className={`${conatainerClassName} place-card`}
+      onMouseEnter={onPlaceHover ? () => onPlaceHover(id) : undefined}
+      onMouseLeave={onPlaceLeave ? () => onPlaceLeave() : undefined}
+    >
       {
         isPremium &&
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       }
-      <div className="cities__image-wrapper place-card__image-wrapper">
-        <Link to={`offer/${id}`}>
+      <div className={`${imageWrapperClassName} place-card__image-wrapper`}>
+        <Link to={`/offer/${id}`}>
           <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image"/>
         </Link>
       </div>
@@ -56,7 +74,7 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave}: PlaceCardProps): JSX.Ele
         <h2 className="place-card__name">
           <Link to={`offer/${id}`}>{title}</Link>
         </h2>
-        <p className="place-card__type">{makeFirstLetterUppercase(type)}</p>
+        <p className="place-card__type">{capitalize(type)}</p>
       </div>
     </article>
   );

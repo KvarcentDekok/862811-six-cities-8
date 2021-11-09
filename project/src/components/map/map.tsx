@@ -4,11 +4,12 @@ import 'leaflet/dist/leaflet.css';
 import useMap from '../../hooks/useMap';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
 import { useSelector } from 'react-redux';
-import { getOffersByCity } from '../../store/data/selectors';
+import { getOffersByCity, getOffersNearby } from '../../store/data/selectors';
 import { getCity } from '../../store/main/selectors';
 
 type MapProps = {
-  activeOfferId: number
+  containerClassName: 'cities__map' | 'property__map',
+  activeOfferId?: number
 };
 
 const defaultCustomIcon = leaflet.icon({
@@ -25,8 +26,8 @@ const currentCustomIcon = leaflet.icon({
 
 const markersGroup: LayerGroup = leaflet.layerGroup([]);
 
-function Map({ activeOfferId }: MapProps): JSX.Element {
-  const offers = useSelector(getOffersByCity);
+function Map({ containerClassName, activeOfferId }: MapProps): JSX.Element {
+  const offers = useSelector(containerClassName === 'cities__map' ? getOffersByCity : getOffersNearby);
   const currentCity = useSelector(getCity);
   const mapRef = useRef(null);
   const map = useMap(mapRef, currentCity);
@@ -51,7 +52,7 @@ function Map({ activeOfferId }: MapProps): JSX.Element {
     }
   }, [map, offers, activeOfferId, currentCity]);
 
-  return <section className="cities__map map" ref={mapRef}></section>;
+  return <section className={`${containerClassName} map`} ref={mapRef}></section>;
 }
 
 export default Map;

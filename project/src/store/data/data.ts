@@ -12,10 +12,18 @@ const loadOffers = createAsyncThunk(
   },
 );
 
+const loadOffersNearby = createAsyncThunk(
+  'data/loadOffersNearby',
+  async (offerId: string) => {
+    const {data} = await api.get<OfferServer[]>(APIRoute.OffersNearby.replace(':hotel_id', offerId));
+    return data;
+  },
+);
+
 const initialState: DataState = {
-  offers: [],
   allOffers: [],
   isLoading: true,
+  offersNearby: [],
 };
 
 const dataSlice = createSlice({
@@ -33,9 +41,12 @@ const dataSlice = createSlice({
       })
       .addCase(loadOffers.rejected, (state) => {
         state.isLoading = false;
+      })
+      .addCase(loadOffersNearby.fulfilled, (state, action) => {
+        state.offersNearby = adaptToClientOffers(action.payload);
       });
   },
 });
 
-export {loadOffers};
+export {loadOffers, loadOffersNearby};
 export default dataSlice.reducer;

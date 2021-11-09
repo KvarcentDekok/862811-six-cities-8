@@ -54,10 +54,10 @@ function MainScreen(): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <PlacesList onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave}/>
+              <PlacesList onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave} variant='cities'/>
             </section>
             <div className="cities__right-section">
-              <Map activeOfferId={activeOfferId}/>
+              <Map containerClassName='cities__map' activeOfferId={activeOfferId}/>
             </div>
           </div>
         </div>

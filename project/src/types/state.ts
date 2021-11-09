@@ -8,9 +8,9 @@ export type MainState = {
 }
 
 export type DataState = {
-  offers: Offer[],
   allOffers: Offer[],
-  isLoading: boolean
+  isLoading: boolean,
+  offersNearby: Offer[]
 }
 
 export type UserState = {

@@ -1,11 +1,16 @@
-import React from 'react';
-import ReviewForm from '../review-form/review-form';
 import { Offer } from '../../types/offer';
 import { useParams } from 'react-router';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
-import { getISOString, getPercentageOfRating, makeFirstLetterUppercase, formatDate } from '../../utils/utils';
+import { getPercentageOfRating, capitalize } from '../../utils/utils';
 import { Review } from '../../types/review';
 import Header from '../header/header';
+import Reviews from '../reviews/reviews';
+import Map from '../map/map';
+import { useDispatch } from 'react-redux';
+import { changeCity } from '../../store/main/main';
+import { loadOffersNearby } from '../../store/data/data';
+import PlacesList from '../places-list/places-list';
+import { useEffect } from 'react';
 
 type RoomScreenProps = {
   offers: Offer[],
@@ -17,6 +22,14 @@ type PossibleOffer = Offer | undefined;
 function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const offer: PossibleOffer = offers.find((item) => item.id === Number(id));
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (offer) {
+      dispatch(changeCity(offer.city));
+      dispatch(loadOffersNearby(String(offer.id)));
+    }
+  }, [dispatch, offer]);
 
   if (!offer) {
     return (<NotFoundScreen/>);
@@ -36,43 +49,6 @@ function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
     title,
     type,
   } = offer;
-
-  function renderReviews() {
-    return (
-      <>
-        {reviews.map((review) => (
-          <li key={review.id} className="reviews__item">
-            <div className="reviews__user user">
-              <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                <img
-                  className="reviews__avatar user__avatar"
-                  src={review.user.avatarUrl}
-                  width="54"
-                  height="54"
-                  alt="Reviews avatar"
-                />
-              </div>
-              <span className="reviews__user-name">{review.user.name}</span>
-            </div>
-            <div className="reviews__info">
-              <div className="reviews__rating rating">
-                <div className="reviews__stars rating__stars">
-                  <span style={{ width: `${getPercentageOfRating(review.rating)}%` }}></span>
-                  <span className="visually-hidden">Rating</span>
-                </div>
-              </div>
-              <p className="reviews__text">
-                {review.comment}
-              </p>
-              <time className="reviews__time" dateTime={getISOString(review.date)}>
-                {formatDate(review.date)}
-              </time>
-            </div>
-          </li>
-        ))}
-      </>
-    );
-  }
 
   return (
     <div className="page">
@@ -124,12 +100,12 @@ function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">
-                    4.8
+                  {rating}
                 </span>
               </div>
               <ul className="property__features">
                 <li className="property__feature property__feature--entire">
-                  {makeFirstLetterUppercase(type)}
+                  {capitalize(type)}
                 </li>
                 <li className="property__feature property__feature--bedrooms">
                   {bedrooms} Bedrooms
@@ -173,166 +149,17 @@ function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
                   </p>
                 </div>
               </div>
-              <section className="property__reviews reviews">
-                <h2 className="reviews__title">
-                    Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
-                </h2>
-                <ul className="reviews__list">
-                  {renderReviews()}
-                </ul>
-                <ReviewForm onReview={() => false} />
-              </section>
+              <Reviews reviews={reviews}/>
             </div>
           </div>
-          <section className="property__map map"></section>
+          <Map containerClassName='property__map'/>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">
                 Other places in the neighbourhood
             </h2>
-            <div className="near-places__list places__list">
-              <article className="near-places__card place-card">
-                <div className="near-places__image-wrapper place-card__image-wrapper">
-                  <a href="#">
-                    <img
-                      className="place-card__image"
-                      src="img/room.jpg"
-                      width="260"
-                      height="200"
-                      alt="Place image"
-                    />
-                  </a>
-                </div>
-                <div className="place-card__info">
-                  <div className="place-card__price-wrapper">
-                    <div className="place-card__price">
-                      <b className="place-card__price-value">&euro;80</b>
-                      <span className="place-card__price-text">
-                          &#47;&nbsp;night
-                      </span>
-                    </div>
-                    <button
-                      className="place-card__bookmark-button place-card__bookmark-button--active button"
-                      type="button"
-                    >
-                      <svg
-                        className="place-card__bookmark-icon"
-                        width="18"
-                        height="19"
-                      >
-                        <use xlinkHref="#icon-bookmark"></use>
-                      </svg>
-                      <span className="visually-hidden">In bookmarks</span>
-                    </button>
-                  </div>
-                  <div className="place-card__rating rating">
-                    <div className="place-card__stars rating__stars">
-                      <span style={{ width: '80%' }}></span>
-                      <span className="visually-hidden">Rating</span>
-                    </div>
-                  </div>
-                  <h2 className="place-card__name">
-                    <a href="#">Wood and stone place</a>
-                  </h2>
-                  <p className="place-card__type">Private room</p>
-                </div>
-              </article>
-
-              <article className="near-places__card place-card">
-                <div className="near-places__image-wrapper place-card__image-wrapper">
-                  <a href="#">
-                    <img
-                      className="place-card__image"
-                      src="img/apartment-02.jpg"
-                      width="260"
-                      height="200"
-                      alt="Place image"
-                    />
-                  </a>
-                </div>
-                <div className="place-card__info">
-                  <div className="place-card__price-wrapper">
-                    <div className="place-card__price">
-                      <b className="place-card__price-value">&euro;132</b>
-                      <span className="place-card__price-text">
-                          &#47;&nbsp;night
-                      </span>
-                    </div>
-                    <button
-                      className="place-card__bookmark-button button"
-                      type="button"
-                    >
-                      <svg
-                        className="place-card__bookmark-icon"
-                        width="18"
-                        height="19"
-                      >
-                        <use xlinkHref="#icon-bookmark"></use>
-                      </svg>
-                      <span className="visually-hidden">To bookmarks</span>
-                    </button>
-                  </div>
-                  <div className="place-card__rating rating">
-                    <div className="place-card__stars rating__stars">
-                      <span style={{ width: '80%' }}></span>
-                      <span className="visually-hidden">Rating</span>
-                    </div>
-                  </div>
-                  <h2 className="place-card__name">
-                    <a href="#">Canal View Prinsengracht</a>
-                  </h2>
-                  <p className="place-card__type">Apartment</p>
-                </div>
-              </article>
-
-              <article className="near-places__card place-card">
-                <div className="near-places__image-wrapper place-card__image-wrapper">
-                  <a href="#">
-                    <img
-                      className="place-card__image"
-                      src="img/apartment-03.jpg"
-                      width="260"
-                      height="200"
-                      alt="Place image"
-                    />
-                  </a>
-                </div>
-                <div className="place-card__info">
-                  <div className="place-card__price-wrapper">
-                    <div className="place-card__price">
-                      <b className="place-card__price-value">&euro;180</b>
-                      <span className="place-card__price-text">
-                          &#47;&nbsp;night
-                      </span>
-                    </div>
-                    <button
-                      className="place-card__bookmark-button button"
-                      type="button"
-                    >
-                      <svg
-                        className="place-card__bookmark-icon"
-                        width="18"
-                        height="19"
-                      >
-                        <use xlinkHref="#icon-bookmark"></use>
-                      </svg>
-                      <span className="visually-hidden">To bookmarks</span>
-                    </button>
-                  </div>
-                  <div className="place-card__rating rating">
-                    <div className="place-card__stars rating__stars">
-                      <span style={{ width: '100%' }}></span>
-                      <span className="visually-hidden">Rating</span>
-                    </div>
-                  </div>
-                  <h2 className="place-card__name">
-                    <a href="#">Nice, cozy, warm big bed apartment</a>
-                  </h2>
-                  <p className="place-card__type">Apartment</p>
-                </div>
-              </article>
-            </div>
+            <PlacesList variant='near-places' />
           </section>
         </div>
       </main>

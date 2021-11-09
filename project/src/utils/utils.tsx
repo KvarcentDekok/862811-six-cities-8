@@ -5,7 +5,7 @@ export function getPercentageOfRating(rating: number): number {
   return rating * 100 / 5;
 }
 
-export function makeFirstLetterUppercase(string: string): string {
+export function capitalize(string: string): string {
   return string[0].toUpperCase() + string.slice(1);
 }
 
