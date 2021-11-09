@@ -1,10 +1,11 @@
 import { Offer, City } from './offer';
-import { AuthorizationStatus } from '../const';
+import { AuthorizationStatus, Sorting } from '../const';
 import { AuthInfo } from './auth-info';
 import { RootState } from '../store/root-reducer';
 
 export type MainState = {
-  city: City
+  city: City,
+  sorting: Sorting
 }
 
 export type DataState = {
