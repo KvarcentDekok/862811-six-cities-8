@@ -13,9 +13,9 @@ export type Rating = {
   value: string
 }
 
-export type FormControls = {
+export type CommentData = {
   rating: string,
-  review: string
+  comment: string
 }
 
 export type ReviewServer = Omit<Review, 'user'> & {

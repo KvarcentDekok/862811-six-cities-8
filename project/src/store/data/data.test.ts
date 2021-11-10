@@ -6,7 +6,9 @@ describe('Reducer: data', () => {
       .toEqual({
         allOffers: [],
         isLoading: true,
+        isCommentSending: false,
         offersNearby: [],
+        reviews: [],
       });
   });
 });
