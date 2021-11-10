@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 import { Rating } from '../types/review';
+import { Sorting } from '../const';
+import { Offer } from '../types/offer';
 
 export function getPercentageOfRating(rating: number): number {
   return rating * 100 / 5;
@@ -39,3 +41,22 @@ export const ratingValues: Rating[] = [
     value: '1',
   },
 ];
+
+export function getEnumValues<T extends Record<string, T[keyof T]>>(enumeration: T): Array<T[keyof T]> {
+  return Object
+    .keys(enumeration)
+    .map((key) => enumeration[key]);
+}
+
+export function sortOffers(offers: Offer[], currentSorting: Sorting): Offer[] {
+  switch (currentSorting) {
+    case Sorting.PriceLowToHigh:
+      return offers.sort((a, b) => a.price - b.price);
+    case Sorting.PriceHighToLow:
+      return offers.sort((a, b) => b.price - a.price);
+    case Sorting.TopRated:
+      return offers.sort((a, b) => b.rating - a.rating);
+    default:
+      return offers;
+  }
+}
