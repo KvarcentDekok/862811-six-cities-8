@@ -9,10 +9,9 @@ import PrivateRoute from '../private-route/private-route';
 import { useSelector } from 'react-redux';
 import { SpinnerDotted } from 'spinners-react';
 import { CSSProperties } from 'react';
-import { getLoadingFlag, getAllOffers } from '../../store/data/selectors';
+import { getLoadingFlag } from '../../store/data/selectors';
 
 function App(): JSX.Element {
-  const offers = useSelector(getAllOffers);
   const isLoading = useSelector(getLoadingFlag);
 
   if (isLoading) {
@@ -34,7 +33,7 @@ function App(): JSX.Element {
         <MainScreen/>
       </Route>
       <Route exact path={AppRoute.Room}>
-        <RoomScreen />
+        <RoomScreen/>
       </Route>
       <Route exact path={AppRoute.SignIn}>
         <SignInScreen/>
@@ -42,7 +41,7 @@ function App(): JSX.Element {
       <PrivateRoute
         exact
         path={AppRoute.Favorites}
-        render={() => <FavoritesScreen offers={offers}/>}
+        render={() => <FavoritesScreen/>}
       >
       </PrivateRoute>
       <Route>

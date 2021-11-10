@@ -14,7 +14,8 @@ export type DataState = {
   isLoading: boolean,
   isCommentSending: boolean,
   offersNearby: Offer[],
-  reviews: Review[]
+  reviews: Review[],
+  favoriteOffers: Offer[]
 }
 
 export type UserState = {

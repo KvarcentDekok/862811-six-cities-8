@@ -4,16 +4,27 @@ import {createMemoryHistory} from 'history';
 import PlaceCard from './place-card';
 import { adaptToClientOffers } from '../../services/api';
 import { makeFakeOffer } from '../../utils/mocks';
+import { configureMockStore } from '@jedmao/redux-mock-store';
+import { AuthorizationStatus } from '../../const';
+import { Provider } from 'react-redux';
+
+const mockStore = configureMockStore();
 
 describe('Component: PlaceCard', () => {
+  const store = mockStore({
+    USER: {authorizationStatus: AuthorizationStatus.Auth},
+  });
+
   it('should render correctly', () => {
     const history = createMemoryHistory();
     const offer = adaptToClientOffers([makeFakeOffer({})])[0];
 
     const {getByAltText, getByText} = render(
-      <Router history={history}>
-        <PlaceCard offer={offer} onPlaceHover={jest.fn()} onPlaceLeave={jest.fn()} />
-      </Router>,
+      <Provider store={store}>
+        <Router history={history}>
+          <PlaceCard offer={offer} onPlaceHover={jest.fn()} onPlaceLeave={jest.fn()} variant='cities' />
+        </Router>
+      </Provider>,
     );
 
     expect(getByAltText(/Place image/i)).toBeInTheDocument();
@@ -27,9 +38,11 @@ describe('Component: PlaceCard', () => {
     const offer = adaptToClientOffers([makeFakeOffer({isPremium: true})])[0];
 
     const {getByText} = render(
-      <Router history={history}>
-        <PlaceCard offer={offer} onPlaceHover={jest.fn()} onPlaceLeave={jest.fn()} />
-      </Router>,
+      <Provider store={store}>
+        <Router history={history}>
+          <PlaceCard offer={offer} onPlaceHover={jest.fn()} onPlaceLeave={jest.fn()} variant='cities' />
+        </Router>
+      </Provider>,
     );
 
     expect(getByText(/Premium/i)).toBeInTheDocument();
@@ -40,9 +53,11 @@ describe('Component: PlaceCard', () => {
     const offer = adaptToClientOffers([makeFakeOffer({isPremium: false})])[0];
 
     const {queryByText} = render(
-      <Router history={history}>
-        <PlaceCard offer={offer} onPlaceHover={jest.fn()} onPlaceLeave={jest.fn()} />
-      </Router>,
+      <Provider store={store}>
+        <Router history={history}>
+          <PlaceCard offer={offer} onPlaceHover={jest.fn()} onPlaceLeave={jest.fn()} variant='cities' />
+        </Router>
+      </Provider>,
     );
 
     expect(queryByText(/Premium/i)).not.toBeInTheDocument();

@@ -9,6 +9,7 @@ describe('Reducer: data', () => {
         isCommentSending: false,
         offersNearby: [],
         reviews: [],
+        favoriteOffers: [],
       });
   });
 });

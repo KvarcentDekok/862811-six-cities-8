@@ -19,3 +19,4 @@ export const getLoadingFlag = (state: State): boolean => state[NameSpace.Data].i
 export const getCommentSendingFlag = (state: State): boolean => state[NameSpace.Data].isCommentSending;
 export const getOffersNearby = (state: State): Offer[] => state[NameSpace.Data].offersNearby;
 export const getReviews = (state: State): Review[] => state[NameSpace.Data].reviews;
+export const getFavoriteOffers = (state: State): Offer[] => state[NameSpace.Data].favoriteOffers;

@@ -10,7 +10,9 @@ export enum APIRoute {
   Login = '/login',
   OffersNearby = '/hotels/:hotel_id/nearby',
   Reviews = '/comments/:hotel_id',
-  Comment = '/comments/:hotel_id'
+  Comment = '/comments/:hotel_id',
+  Favorite = '/favorite/:hotel_id/:status',
+  FavoriteOffers = '/favorite'
 }
 
 export enum AuthorizationStatus {
@@ -77,4 +79,15 @@ export enum Sorting {
   PriceLowToHigh = 'Price: low to high',
   PriceHighToLow = 'Price: high to low',
   TopRated = 'Top rated first'
+}
+
+export enum ErrorMesssage {
+  NoOffers = 'Failed to get offers',
+  NoOffersNearby = 'Failed to get offers nearby',
+  NoReviews = 'Failed to get reviews',
+  SendReviewError = 'Failed to send review',
+  AddToFavoriteError = 'Failed to add in favorites',
+  RemoveFromFavoriteError = 'Failed to remove from favorites',
+  NoFavoriteOffers = 'Failed to get favorite offers',
+  LoginError = 'Failed to login'
 }
