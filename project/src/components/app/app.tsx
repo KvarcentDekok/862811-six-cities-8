@@ -6,17 +6,12 @@ import RoomScreen from '../room-screen/room-screen';
 import SignInScreen from '../sign-in-screen/sign-in-screen';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import PrivateRoute from '../private-route/private-route';
-import { Review } from '../../types/review';
 import { useSelector } from 'react-redux';
 import { SpinnerDotted } from 'spinners-react';
 import { CSSProperties } from 'react';
 import { getLoadingFlag, getAllOffers } from '../../store/data/selectors';
 
-type AppProps = {
-  reviews: Review[]
-}
-
-function App({reviews}: AppProps): JSX.Element {
+function App(): JSX.Element {
   const offers = useSelector(getAllOffers);
   const isLoading = useSelector(getLoadingFlag);
 
@@ -39,7 +34,7 @@ function App({reviews}: AppProps): JSX.Element {
         <MainScreen/>
       </Route>
       <Route exact path={AppRoute.Room}>
-        <RoomScreen offers={offers} reviews={reviews}/>
+        <RoomScreen />
       </Route>
       <Route exact path={AppRoute.SignIn}>
         <SignInScreen/>

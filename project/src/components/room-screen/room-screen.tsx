@@ -2,24 +2,20 @@ import { Offer } from '../../types/offer';
 import { useParams } from 'react-router';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import { getPercentageOfRating, capitalize } from '../../utils/utils';
-import { Review } from '../../types/review';
 import Header from '../header/header';
 import Reviews from '../reviews/reviews';
 import Map from '../map/map';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { changeCity } from '../../store/main/main';
-import { loadOffersNearby } from '../../store/data/data';
+import { loadOffersNearby, loadReviews } from '../../store/data/data';
 import PlacesList from '../places-list/places-list';
 import { useEffect } from 'react';
-
-type RoomScreenProps = {
-  offers: Offer[],
-  reviews: Review[]
-};
+import { getAllOffers } from '../../store/data/selectors';
 
 type PossibleOffer = Offer | undefined;
 
-function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
+function RoomScreen(): JSX.Element {
+  const offers = useSelector(getAllOffers);
   const { id } = useParams<{ id: string }>();
   const offer: PossibleOffer = offers.find((item) => item.id === Number(id));
   const dispatch = useDispatch();
@@ -28,6 +24,7 @@ function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
     if (offer) {
       dispatch(changeCity(offer.city));
       dispatch(loadOffersNearby(String(offer.id)));
+      dispatch(loadReviews(String(offer.id)));
     }
   }, [dispatch, offer]);
 
@@ -149,7 +146,7 @@ function RoomScreen({ offers, reviews }: RoomScreenProps): JSX.Element {
                   </p>
                 </div>
               </div>
-              <Reviews reviews={reviews}/>
+              <Reviews offerId={id}/>
             </div>
           </div>
           <Map containerClassName='property__map'/>

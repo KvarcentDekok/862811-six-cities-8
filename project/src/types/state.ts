@@ -2,6 +2,7 @@ import { Offer, City } from './offer';
 import { AuthorizationStatus, Sorting } from '../const';
 import { AuthInfo } from './auth-info';
 import { RootState } from '../store/root-reducer';
+import { Review } from './review';
 
 export type MainState = {
   city: City,
@@ -11,7 +12,9 @@ export type MainState = {
 export type DataState = {
   allOffers: Offer[],
   isLoading: boolean,
-  offersNearby: Offer[]
+  isCommentSending: boolean,
+  offersNearby: Offer[],
+  reviews: Review[]
 }
 
 export type UserState = {

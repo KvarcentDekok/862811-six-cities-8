@@ -2,9 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app';
 import { Router as BrowserRouter } from 'react-router-dom';
-import { adaptToClientReviews, api } from './services/api';
+import { api } from './services/api';
 import { Provider } from 'react-redux';
-import { reviews } from './mocks/reviews';
 import { rootReducer } from './store/root-reducer';
 import { configureStore } from '@reduxjs/toolkit';
 import { loadOffers } from './store/data/data';
@@ -28,7 +27,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter history={browserHistory}>
-        <App reviews={adaptToClientReviews(reviews)}/>
+        <App />
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,

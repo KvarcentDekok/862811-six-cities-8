@@ -3,15 +3,24 @@ import {Router} from 'react-router-dom';
 import {createMemoryHistory} from 'history';
 import ReviewForm from './review-form';
 import { ratingValues } from '../../utils/utils';
+import { configureMockStore } from '@jedmao/redux-mock-store';
+import { Provider } from 'react-redux';
 
-describe('Component: CitiesList', () => {
+const mockStore = configureMockStore();
+
+describe('Component: ReviewForm', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
+    const store = mockStore({
+      DATA: {isCommentSending: false},
+    });
 
     const {getByLabelText, getByTitle} = render(
-      <Router history={history}>
-        <ReviewForm onReview={jest.fn} />
-      </Router>,
+      <Provider store={store}>
+        <Router history={history}>
+          <ReviewForm offerId='1' />
+        </Router>
+      </Provider>,
     );
 
     for (let i = 0; i < ratingValues.length; i++) {

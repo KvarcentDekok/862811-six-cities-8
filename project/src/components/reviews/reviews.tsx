@@ -1,12 +1,18 @@
-import { Review } from '../../types/review';
+import { useSelector } from 'react-redux';
+import { getReviews } from '../../store/data/selectors';
 import ReviewForm from '../review-form/review-form';
 import ReviewComponent from '../review/review';
+import { getAuthorizationStatus } from '../../store/user/selectors';
+import { AuthorizationStatus } from '../../const';
 
 type ReviewsProps = {
-  reviews: Review[]
-};
+  offerId: string
+}
 
-function Reviews({ reviews }: ReviewsProps): JSX.Element {
+function Reviews({offerId}: ReviewsProps): JSX.Element {
+  const reviews = useSelector(getReviews);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+
   function renderReviews() {
     return reviews.map((review) => (
       <ReviewComponent key={review.id} review={review} />
@@ -21,7 +27,7 @@ function Reviews({ reviews }: ReviewsProps): JSX.Element {
       <ul className="reviews__list">
         {renderReviews()}
       </ul>
-      <ReviewForm onReview={() => false} />
+      {authorizationStatus === AuthorizationStatus.Auth && <ReviewForm offerId={offerId} />}
     </section>
   );
 }

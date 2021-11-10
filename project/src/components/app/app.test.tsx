@@ -5,8 +5,8 @@ import {Provider} from 'react-redux';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import { AuthorizationStatus, AppRoute, CITIES, APIRoute } from '../../const';
 import App from './app';
-import { adaptToClientOffers, api } from '../../services/api';
-import { makeFakeOffer } from '../../utils/mocks';
+import { adaptToClientOffers, adaptToClientReviews, api } from '../../services/api';
+import { makeFakeOffer, makeFakeReview } from '../../utils/mocks';
 import MockAdapter from 'axios-mock-adapter';
 import thunk, {ThunkDispatch} from 'redux-thunk';
 import { State } from '../../types/state';
@@ -21,9 +21,10 @@ const mockStore = configureMockStore<
     ThunkDispatch<State, typeof api, Action>
   >(middlewares);
 const offers = adaptToClientOffers(new Array(NUMBER_OF_OFFERS).fill(makeFakeOffer({cityName: CITIES[0].name})));
+const reviews = adaptToClientReviews(new Array(2).fill(makeFakeReview()));
 
 const store = mockStore({
-  DATA: {allOffers: offers, offersNearby: offers},
+  DATA: {allOffers: offers, offersNearby: offers, reviews: reviews},
   MAIN: {city: CITIES[0]},
   USER: {authorizationStatus: AuthorizationStatus.Auth},
 });
@@ -34,7 +35,7 @@ const history = createMemoryHistory();
 const fakeApp = (
   <Provider store={store}>
     <Router history={history}>
-      <App reviews={[]} />
+      <App />
     </Router>
   </Provider>
 );
