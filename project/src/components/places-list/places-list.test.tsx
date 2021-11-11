@@ -4,7 +4,7 @@ import {createMemoryHistory} from 'history';
 import PlacesList from './places-list';
 import { Provider } from 'react-redux';
 import { configureMockStore } from '@jedmao/redux-mock-store';
-import { CITIES } from '../../const';
+import { AuthorizationStatus, CITIES } from '../../const';
 import { adaptToClientOffers } from '../../services/api';
 import { makeFakeOffer } from '../../utils/mocks';
 
@@ -18,6 +18,7 @@ describe('Component: PlacesList', () => {
     const store = mockStore({
       DATA: {allOffers: adaptToClientOffers(new Array(NUMBER_OF_OFFERS).fill(makeFakeOffer({cityName: CITIES[0].name})))},
       MAIN: {city: CITIES[0]},
+      USER: {authorizationStatus: AuthorizationStatus.Auth},
     });
 
     const {queryAllByAltText} = render(

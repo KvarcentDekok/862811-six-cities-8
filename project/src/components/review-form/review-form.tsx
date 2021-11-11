@@ -4,6 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ratingValues } from '../../utils/utils';
 import { comment as commentAction } from '../../store/data/data';
 import { getCommentSendingFlag } from '../../store/data/selectors';
+import { AppDispatch } from '../../store/store';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
+import { ErrorMesssage } from '../../const';
 
 const MIN_REVIEW_LENGTH = 50;
 
@@ -16,19 +20,18 @@ function ReviewForm({offerId}: ReviewFormProps): JSX.Element {
     rating: '',
     comment: '',
   });
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const isCommentSending = useSelector(getCommentSendingFlag);
 
   const {rating, comment} = formControls;
-  const commentData = {
-    rating,
-    comment,
-  };
 
   async function onSubmitReviewForm(evt: FormEvent<HTMLFormElement>) {
     evt.preventDefault();
-    await dispatch(commentAction({commentData, offerId}));
-    setFormControls({rating: '', comment: ''});
+
+    await dispatch(commentAction({commentData: formControls, offerId}))
+      .then(unwrapResult)
+      .then(() => setFormControls({rating: '', comment: ''}))
+      .catch(() => toast.error(ErrorMesssage.SendReviewError));
   }
 
   function onChangeReview({target}: ChangeEvent<HTMLTextAreaElement>) {

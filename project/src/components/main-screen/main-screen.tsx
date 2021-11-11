@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { getOffersByCity } from '../../store/data/selectors';
 import { getCity } from '../../store/main/selectors';
 import PlacesSorting from '../places-sorting/places-sorting';
+import CitiesContainerEmpty from '../cities-container-empty/cities-container-empty';
 
 function MainScreen(): JSX.Element {
   const offers = useSelector(getOffersByCity);
@@ -36,17 +37,20 @@ function MainScreen(): JSX.Element {
           </section>
         </div>
         <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offers.length} places to stay in {currentCity.name}</b>
-              <PlacesSorting/>
-              <PlacesList onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave} variant='cities'/>
-            </section>
-            <div className="cities__right-section">
-              <Map containerClassName='cities__map' activeOfferId={activeOfferId}/>
+          {offers.length ?
+            <div className="cities__places-container container">
+              <section className="cities__places places">
+                <h2 className="visually-hidden">Places</h2>
+                <b className="places__found">{offers.length} places to stay in {currentCity.name}</b>
+                <PlacesSorting/>
+                <PlacesList onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave} variant='cities'/>
+              </section>
+              <div className="cities__right-section">
+                <Map containerClassName='cities__map' activeOfferId={activeOfferId}/>
+              </div>
             </div>
-          </div>
+            :
+            <CitiesContainerEmpty/>}
         </div>
       </main>
     </div>

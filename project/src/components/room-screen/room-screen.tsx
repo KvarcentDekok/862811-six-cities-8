@@ -11,6 +11,10 @@ import { loadOffersNearby, loadReviews } from '../../store/data/data';
 import PlacesList from '../places-list/places-list';
 import { useEffect } from 'react';
 import { getAllOffers } from '../../store/data/selectors';
+import { AppDispatch } from '../../store/store';
+import { toast } from 'react-toastify';
+import { ErrorMesssage } from '../../const';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 type PossibleOffer = Offer | undefined;
 
@@ -18,13 +22,17 @@ function RoomScreen(): JSX.Element {
   const offers = useSelector(getAllOffers);
   const { id } = useParams<{ id: string }>();
   const offer: PossibleOffer = offers.find((item) => item.id === Number(id));
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (offer) {
       dispatch(changeCity(offer.city));
-      dispatch(loadOffersNearby(String(offer.id)));
-      dispatch(loadReviews(String(offer.id)));
+      dispatch(loadOffersNearby(String(offer.id)))
+        .then(unwrapResult)
+        .catch(() => toast.error(ErrorMesssage.NoOffersNearby));
+      dispatch(loadReviews(String(offer.id)))
+        .then(unwrapResult)
+        .catch(() => toast.error(ErrorMesssage.NoReviews));
     }
   }, [dispatch, offer]);
 

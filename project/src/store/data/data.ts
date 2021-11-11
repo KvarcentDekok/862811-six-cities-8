@@ -10,6 +10,11 @@ type CommentParams = {
   offerId: string
 }
 
+type ChangeFavoriteStatusParams = {
+  status: number,
+  offerId: string
+}
+
 
 const loadOffers = createAsyncThunk(
   'data/loadOffers',
@@ -43,12 +48,29 @@ const comment = createAsyncThunk(
   },
 );
 
+const changeFavoriteStatus = createAsyncThunk(
+  'user/changeFavoriteStatus',
+  async ({status, offerId}: ChangeFavoriteStatusParams) => {
+    const {data} = await api.post(APIRoute.Favorite.replace(':hotel_id', offerId).replace(':status', String(status)));
+    return data;
+  },
+);
+
+const loadFavoriteOffers = createAsyncThunk(
+  'user/loadFavoriteOffers',
+  async () => {
+    const {data} = await api.get(APIRoute.FavoriteOffers);
+    return data;
+  },
+);
+
 const initialState: DataState = {
   allOffers: [],
   isLoading: true,
   isCommentSending: false,
   offersNearby: [],
   reviews: [],
+  favoriteOffers: [],
 };
 
 const dataSlice = createSlice({
@@ -79,9 +101,27 @@ const dataSlice = createSlice({
       .addCase(comment.fulfilled, (state, action) => {
         state.isCommentSending = false;
         state.reviews = adaptToClientReviews(action.payload);
+      })
+      .addCase(comment.rejected, (state) => {
+        state.isCommentSending = false;
+      })
+      .addCase(changeFavoriteStatus.fulfilled, (state, action) => {
+        const { id, isFavorite } = action.payload;
+        const offerIndexAll = state.allOffers.findIndex((offer) => offer.id === id);
+
+        state.allOffers[offerIndexAll] = adaptToClientOffers([action.payload])[0];
+
+        if (state.favoriteOffers.length && !isFavorite) {
+          const offerIndexFavorite = state.favoriteOffers.findIndex((offer) => offer.id === id);
+
+          state.favoriteOffers.splice(offerIndexFavorite, 1);
+        }
+      })
+      .addCase(loadFavoriteOffers.fulfilled, (state, action) => {
+        state.favoriteOffers = adaptToClientOffers(action.payload);
       });
   },
 });
 
-export {loadOffers, loadOffersNearby, loadReviews, comment};
+export {loadOffers, loadOffersNearby, loadReviews, comment, changeFavoriteStatus, loadFavoriteOffers};
 export default dataSlice.reducer;

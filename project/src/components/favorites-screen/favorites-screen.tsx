@@ -1,17 +1,27 @@
 import React from 'react';
 import { Offer } from '../../types/offer';
 import LocationFavorite from '../location-favorite/location-favorite';
-import PlaceCardFavorite from '../place-card-favorite/place-card-favorite';
+import PlaceCard from '../place-card/place-card';
 import Header from '../header/header';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadFavoriteOffers } from '../../store/data/data';
+import { getFavoriteOffers } from '../../store/data/selectors';
+import { AppDispatch } from '../../store/store';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
+import { ErrorMesssage } from '../../const';
 
-type FavoritesScreenProps = {
-  offers: Offer[];
-};
+function FavoritesScreen(): JSX.Element {
+  const dispatch = useDispatch<AppDispatch>();
 
-function FavoritesScreen({ offers }: FavoritesScreenProps): JSX.Element {
-  const favoriteOffers: Offer[] = offers.filter(
-    (offer: Offer) => offer.isFavorite,
-  );
+  useEffect(() => {
+    dispatch(loadFavoriteOffers())
+      .then(unwrapResult)
+      .catch(() => toast.error(ErrorMesssage.NoFavoriteOffers));
+  }, [dispatch]);
+
+  const favoriteOffers = useSelector(getFavoriteOffers);
   const uniqueCities = Array.from(
     new Set(favoriteOffers.map((offer: Offer) => offer.city.name)),
   );
@@ -23,7 +33,7 @@ function FavoritesScreen({ offers }: FavoritesScreenProps): JSX.Element {
           {favoriteOffers
             .filter((offer: Offer) => offer.city.name === cityName)
             .map((offer: Offer) => (
-              <PlaceCardFavorite key={offer.id} offer={offer} />
+              <PlaceCard key={offer.id} offer={offer} variant='favorites' />
             ))}
         </>
       </LocationFavorite>
@@ -36,10 +46,19 @@ function FavoritesScreen({ offers }: FavoritesScreenProps): JSX.Element {
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
-          <section className="favorites">
-            <h1 className="favorites__title">Saved listing</h1>
-            <ul className="favorites__list">{renderLocations()}</ul>
-          </section>
+          {favoriteOffers.length ?
+            <section className="favorites">
+              <h1 className="favorites__title">Saved listing</h1>
+              <ul className="favorites__list">{renderLocations()}</ul>
+            </section>
+            :
+            <section className="favorites favorites--empty">
+              <h1 className="visually-hidden">Favorites (empty)</h1>
+              <div className="favorites__status-wrapper">
+                <b className="favorites__status">Nothing yet saved.</b>
+                <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
+              </div>
+            </section>}
         </div>
       </main>
       <footer className="footer container">

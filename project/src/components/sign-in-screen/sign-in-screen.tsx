@@ -3,16 +3,21 @@ import { AuthData } from '../../types/auth-data';
 import { login } from '../../store/user/user';
 import { useDispatch } from 'react-redux';
 import browserHistory from '../../browser-history';
-import { AppRoute } from '../../const';
+import { AppRoute, ErrorMesssage } from '../../const';
+import { AppDispatch } from '../../store/store';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 
 function SignInScreen(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const onSubmit = async (authData: AuthData) => {
-    await dispatch(login(authData));
-    browserHistory.push(AppRoute.Main);
+    await dispatch(login(authData))
+      .then(unwrapResult)
+      .then(() => browserHistory.push(AppRoute.Main))
+      .catch(() => toast.error(ErrorMesssage.LoginError));
   };
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
