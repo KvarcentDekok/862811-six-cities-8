@@ -1,19 +1,33 @@
-import React, { memo } from 'react';
-import { useSelector } from 'react-redux';
+import React, { memo, MouseEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AuthorizationStatus } from '../../const';
+import { AppRoute, AuthorizationStatus, ErrorMesssage } from '../../const';
+import { AppDispatch } from '../../store/store';
 import { getAuthorizationStatus, getAuthInfo } from '../../store/user/selectors';
+import { logout } from '../../store/user/user';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
+import browserHistory from '../../browser-history';
 
 function Header(): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const authInfo = useSelector(getAuthInfo);
+  const dispatch = useDispatch<AppDispatch>();
+
+  function onSignOutClick(evt: MouseEvent<HTMLAnchorElement>) {
+    evt.preventDefault();
+    dispatch(logout())
+      .then(unwrapResult)
+      .then(() => browserHistory.push(AppRoute.SignIn))
+      .catch(() => toast.error(ErrorMesssage.LogoutError));
+  }
 
   return (
     <header className="header">
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <a className="header__logo-link header__logo-link--active">
+            <Link className="header__logo-link header__logo-link--active" to={AppRoute.Main}>
               <img
                 className="header__logo"
                 src="img/logo.svg"
@@ -21,7 +35,7 @@ function Header(): JSX.Element {
                 width="81"
                 height="41"
               />
-            </a>
+            </Link>
           </div>
           <nav className="header__nav">
             <ul className="header__nav-list">
@@ -41,7 +55,7 @@ function Header(): JSX.Element {
                       </Link>
                     </li>
                     <li className="header__nav-item">
-                      <a className="header__nav-link" href="#">
+                      <a className="header__nav-link" onClick={onSignOutClick} href=''>
                         <span className="header__signout">Sign out</span>
                       </a>
                     </li>

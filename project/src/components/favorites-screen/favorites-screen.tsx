@@ -10,7 +10,8 @@ import { getFavoriteOffers } from '../../store/data/selectors';
 import { AppDispatch } from '../../store/store';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { ErrorMesssage } from '../../const';
+import { AppRoute, ErrorMesssage } from '../../const';
+import { Link } from 'react-router-dom';
 
 function FavoritesScreen(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
@@ -62,7 +63,7 @@ function FavoritesScreen(): JSX.Element {
         </div>
       </main>
       <footer className="footer container">
-        <a className="footer__logo-link" href="main.html">
+        <Link className="footer__logo-link" to={AppRoute.Main}>
           <img
             className="footer__logo"
             src="img/logo.svg"
@@ -70,7 +71,7 @@ function FavoritesScreen(): JSX.Element {
             width="64"
             height="33"
           />
-        </a>
+        </Link>
       </footer>
     </div>
   );

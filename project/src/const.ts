@@ -12,7 +12,8 @@ export enum APIRoute {
   Reviews = '/comments/:hotel_id',
   Comment = '/comments/:hotel_id',
   Favorite = '/favorite/:hotel_id/:status',
-  FavoriteOffers = '/favorite'
+  FavoriteOffers = '/favorite',
+  Logout = '/logout'
 }
 
 export enum AuthorizationStatus {
@@ -89,5 +90,6 @@ export enum ErrorMesssage {
   AddToFavoriteError = 'Failed to add in favorites',
   RemoveFromFavoriteError = 'Failed to remove from favorites',
   NoFavoriteOffers = 'Failed to get favorite offers',
-  LoginError = 'Failed to login'
+  LoginError = 'Failed to login',
+  LogoutError = 'Failed to logout'
 }

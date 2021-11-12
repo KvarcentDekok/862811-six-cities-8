@@ -1,32 +1,34 @@
 import {render} from '@testing-library/react';
 import {Router} from 'react-router-dom';
 import {createMemoryHistory} from 'history';
-import CitiesList from './cities-list';
+import Map from './map';
 import { Provider } from 'react-redux';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { CITIES } from '../../const';
+import { adaptToClientOffers } from '../../services/api';
+import { makeFakeOffer } from '../../utils/mocks';
+
+const OFFERS_NUMBER = 4;
 
 const mockStore = configureMockStore();
 
-describe('Component: CitiesList', () => {
+describe('Component: Map', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
+    const offers = adaptToClientOffers(new Array(OFFERS_NUMBER).fill(makeFakeOffer({cityName: CITIES[0].name})));
     const store = mockStore({
       MAIN: {city: CITIES[0]},
+      DATA: {allOffers: offers},
     });
 
-    const {getByText} = render(
+    const {container} = render(
       <Provider store={store}>
         <Router history={history}>
-          <CitiesList cities={CITIES} />
+          <Map containerClassName='cities__map' />
         </Router>
       </Provider>,
     );
 
-    for (let i = 0; i < CITIES.length; i++) {
-      expect(getByText(new RegExp(CITIES[i].name, 'i'))).toBeInTheDocument();
-    }
-
-    expect(getByText(new RegExp(CITIES[0].name, 'i')).parentNode).toHaveClass('tabs__item--active');
+    expect(container.querySelectorAll('.leaflet-marker-icon').length).toBe(OFFERS_NUMBER);
   });
 });

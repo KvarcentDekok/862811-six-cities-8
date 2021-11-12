@@ -13,7 +13,7 @@ const NUMBER_OF_OFFERS = 4;
 const mockStore = configureMockStore();
 
 describe('Component: MainScreen', () => {
-  it('should render correctly', () => {
+  it('should render correctly when there is offers', () => {
     const history = createMemoryHistory();
     const store = mockStore({
       DATA: {allOffers: adaptToClientOffers(new Array(NUMBER_OF_OFFERS).fill(makeFakeOffer({cityName: CITIES[0].name})))},
@@ -30,5 +30,24 @@ describe('Component: MainScreen', () => {
     );
 
     expect(getByText(new RegExp(`${NUMBER_OF_OFFERS} places to stay in ${CITIES[0].name}`, 'i'))).toBeInTheDocument();
+  });
+
+  it('should render correctly when there isn\'t offers', () => {
+    const history = createMemoryHistory();
+    const store = mockStore({
+      DATA: {allOffers: []},
+      MAIN: {city: CITIES[0]},
+      USER: {authorizationStatus: AuthorizationStatus.Unknown},
+    });
+
+    const {getByText} = render(
+      <Provider store={store}>
+        <Router history={history}>
+          <MainScreen />
+        </Router>
+      </Provider>,
+    );
+
+    expect(getByText('No places to stay available')).toBeInTheDocument();
   });
 });
