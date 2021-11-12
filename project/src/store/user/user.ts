@@ -1,7 +1,7 @@
 import { UserState } from '../../types/state';
 import { AuthorizationStatus, APIRoute } from '../../const';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { saveToken } from '../../services/token';
+import { saveToken, dropToken } from '../../services/token';
 import { api } from '../../services/api';
 import { AuthData } from '../../types/auth-data';
 
@@ -17,6 +17,14 @@ const login = createAsyncThunk(
   'user/login',
   async (authData: AuthData) => {
     const {data} = await api.post(APIRoute.Login, authData);
+    return data;
+  },
+);
+
+const logout = createAsyncThunk(
+  'user/logout',
+  async () => {
+    const {data} = await api.delete(APIRoute.Logout);
     return data;
   },
 );
@@ -54,10 +62,14 @@ const userSlice = createSlice({
           avatarUrl,
           email,
         };
+      })
+      .addCase(logout.fulfilled, (state) => {
+        dropToken();
+        state.authorizationStatus = AuthorizationStatus.NoAuth;
+        state.authInfo = null;
       });
   },
 });
 
-export {checkAuth};
-export {login};
+export {checkAuth, login, logout};
 export default userSlice.reducer;

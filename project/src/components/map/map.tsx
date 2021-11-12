@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import leaflet, { LayerGroup, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import useMap from '../../hooks/useMap';
+import useMap from '../../hooks/use-map';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
 import { useSelector } from 'react-redux';
 import { getOffersByCity, getOffersNearby } from '../../store/data/selectors';
