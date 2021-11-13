@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
-import { Rating } from '../types/review';
+import { Rating, Review } from '../types/review';
 import { Sorting } from '../const';
 import { Offer } from '../types/offer';
 
 export function getPercentageOfRating(rating: number): number {
-  return rating * 100 / 5;
+  return Math.round(rating) * 100 / 5;
 }
 
 export function capitalize(string: string): string {
@@ -60,3 +60,14 @@ export function sortOffers(offers: Offer[], currentSorting: Sorting): Offer[] {
       return offers;
   }
 }
+
+export function sortReviews(reviews: Review[]): Review[] {
+  return reviews.sort((a, b) => dayjs(a.date).isBefore(dayjs(b.date)) ? 1 : -1);
+}
+
+export const getRandomInteger = (a = 0, b = 1): number => {
+  const lower = Math.ceil(Math.min(a, b));
+  const upper = Math.floor(Math.max(a, b));
+
+  return Math.floor(lower + Math.random() * (upper - lower + 1));
+};

@@ -2,14 +2,7 @@ import React, { memo } from 'react';
 import { Offer } from '../../types/offer';
 import { Link } from 'react-router-dom';
 import { getPercentageOfRating, capitalize } from '../../utils/utils';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeFavoriteStatus } from '../../store/data/data';
-import browserHistory from '../../browser-history';
-import { AppRoute, AuthorizationStatus, ErrorMesssage } from '../../const';
-import { getAuthorizationStatus } from '../../store/user/selectors';
-import { AppDispatch } from '../../store/store';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
+import BookmarkButton from '../bookmark-button/bookmark-button';
 
 type PlaceCardProps = {
   offer: Offer,
@@ -30,26 +23,11 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave, variant}: PlaceCardProps)
     type,
   } = offer;
 
-  const dispatch = useDispatch<AppDispatch>();
-  const authorizationStatus = useSelector(getAuthorizationStatus);
-
   let conatainerClassName = '';
   let imageWrapperClassName = '';
   let cardInfoClassName = '';
   let imageWidth = '';
   let imageHeight = '';
-
-  function onBookmarkClick() {
-    const status = Number(!isFavorite);
-
-    if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(changeFavoriteStatus({status, offerId: String(id)}))
-        .then(unwrapResult)
-        .catch(() => toast.error(status ? ErrorMesssage.AddToFavoriteError : ErrorMesssage.RemoveFromFavoriteError));
-    } else {
-      browserHistory.push(AppRoute.SignIn);
-    }
-  }
 
   switch (variant) {
     case 'cities':
@@ -95,16 +73,7 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave, variant}: PlaceCardProps)
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button
-            className={`place-card__bookmark-button ${isFavorite && 'place-card__bookmark-button--active'} button`}
-            type="button"
-            onClick={onBookmarkClick}
-          >
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">To bookmarks</span>
-          </button>
+          <BookmarkButton isFavorite={isFavorite} id={id} className='place-card' />
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
