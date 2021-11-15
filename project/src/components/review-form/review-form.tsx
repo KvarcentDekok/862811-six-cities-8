@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { ErrorMesssage } from '../../const';
 
 const MIN_REVIEW_LENGTH = 50;
+const MAX_REVIEW_LENGTH = 300;
 
 type ReviewFormProps = {
   offerId: string
@@ -75,6 +76,7 @@ function ReviewForm({offerId}: ReviewFormProps): JSX.Element {
         value={comment}
         onChange={onChangeReview}
         disabled={isCommentSending}
+        maxLength={MAX_REVIEW_LENGTH}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">

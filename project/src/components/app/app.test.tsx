@@ -23,7 +23,7 @@ const mockStore = configureMockStore<
 const offers = adaptToClientOffers(new Array(NUMBER_OF_OFFERS).fill(makeFakeOffer({cityName: CITIES[0].name})));
 const reviews = adaptToClientReviews(new Array(2).fill(makeFakeReview()));
 
-const store = mockStore({
+const defaultStore = mockStore({
   DATA: {allOffers: offers, offersNearby: offers, reviews: reviews, favoriteOffers: offers},
   MAIN: {city: CITIES[0]},
   USER: {authorizationStatus: AuthorizationStatus.Auth},
@@ -32,8 +32,9 @@ const store = mockStore({
 const mockAPI = new MockAdapter(api);
 
 const history = createMemoryHistory();
-const fakeApp = (
-  <Provider store={store}>
+
+const defaultFakeApp = (
+  <Provider store={defaultStore}>
     <Router history={history}>
       <App />
     </Router>
@@ -43,12 +44,26 @@ const fakeApp = (
 describe('Application Routing', () => {
   it('should render "MainScreen" when user navigate to "/"', () => {
     history.push(AppRoute.Main);
-    render(fakeApp);
+    render(defaultFakeApp);
 
     expect(screen.getByText(new RegExp(`${NUMBER_OF_OFFERS} places to stay in ${CITIES[0].name}`, 'i'))).toBeInTheDocument();
   });
 
   it('should render "SignInScreen" when user navigate to "/login"', () => {
+    const store = mockStore({
+      DATA: {allOffers: offers, offersNearby: offers, reviews: reviews, favoriteOffers: offers},
+      MAIN: {city: CITIES[0]},
+      USER: {authorizationStatus: AuthorizationStatus.NoAuth},
+    });
+
+    const fakeApp = (
+      <Provider store={store}>
+        <Router history={history}>
+          <App />
+        </Router>
+      </Provider>
+    );
+
     history.push(AppRoute.SignIn);
     render(fakeApp);
 
@@ -60,7 +75,7 @@ describe('Application Routing', () => {
 
   it('should render "FavoritesScreen" when user navigate to "/favorites"', () => {
     history.push(AppRoute.Favorites);
-    render(fakeApp);
+    render(defaultFakeApp);
 
     expect(screen.getByText(/Saved listing/i)).toBeInTheDocument();
   });
@@ -71,14 +86,14 @@ describe('Application Routing', () => {
       .reply(200, offers);
 
     history.push(`/offer/${offers[0].id}`);
-    render(fakeApp);
+    render(defaultFakeApp);
 
     expect(screen.getByText(/Meet the host/i)).toBeInTheDocument();
   });
 
   it('should render "NotFoundScreen" when user navigate to non-existent route', () => {
     history.push('/non-existent-route');
-    render(fakeApp);
+    render(defaultFakeApp);
 
     expect(screen.getByText('404. Page not found')).toBeInTheDocument();
     expect(screen.getByText('Вернуться на главную')).toBeInTheDocument();

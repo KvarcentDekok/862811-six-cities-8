@@ -8,7 +8,6 @@ function useMap(
   currentCity: City,
 ): Map | null {
   const [map, setMap] = useState<Map | null>(null);
-  const city = currentCity;
 
   useEffect(() => {
     const layer = new TileLayer(
@@ -24,17 +23,17 @@ function useMap(
     if (mapRef.current !== null && map === null) {
       const instance = leaflet.map(mapRef.current, {
         center: {
-          lat: city.location.latitude,
-          lng: city.location.longitude,
+          lat: currentCity.location.latitude,
+          lng: currentCity.location.longitude,
         },
-        zoom: city.location.zoom,
+        zoom: currentCity.location.zoom,
       });
 
       instance.addLayer(layer);
 
       setMap(instance);
     }
-  }, [mapRef, map, city, currentCity]);
+  }, [mapRef, map, currentCity]);
 
   return map;
 }

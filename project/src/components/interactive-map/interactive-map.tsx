@@ -6,10 +6,11 @@ import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
 import { useSelector } from 'react-redux';
 import { getOffersByCity, getOffersNearby } from '../../store/data/selectors';
 import { getCity } from '../../store/main/selectors';
+import browserHistory from '../../browser-history';
 
 type MapProps = {
   containerClassName: 'cities__map' | 'property__map',
-  activeOfferId?: number
+  activeOfferId: number
 };
 
 const defaultCustomIcon = leaflet.icon({
@@ -26,11 +27,27 @@ const currentCustomIcon = leaflet.icon({
 
 const markersGroup: LayerGroup = leaflet.layerGroup([]);
 
-function Map({ containerClassName, activeOfferId }: MapProps): JSX.Element {
-  const offers = useSelector(containerClassName === 'cities__map' ? getOffersByCity : getOffersNearby);
+function InteractiveMap({ containerClassName, activeOfferId }: MapProps): JSX.Element {
+  const offersByCity = useSelector(getOffersByCity);
+  const offersNearby = useSelector(getOffersNearby);
   const currentCity = useSelector(getCity);
   const mapRef = useRef(null);
   const map = useMap(mapRef, currentCity);
+
+  let offersToShow = offersByCity;
+
+  if (containerClassName === 'property__map') {
+    const currentOffer = offersByCity.find((offer) => offer.id === activeOfferId);
+
+    if (currentOffer) {
+      offersToShow = offersNearby.slice();
+      offersToShow.splice(-1, 0, currentOffer);
+    }
+  }
+
+  function onMarkerClick(offerId: number) {
+    browserHistory.push(`/offer/${offerId}`);
+  }
 
   useEffect(() => {
     if (map) {
@@ -38,11 +55,11 @@ function Map({ containerClassName, activeOfferId }: MapProps): JSX.Element {
 
       markersGroup?.clearLayers();
 
-      offers.forEach((offer, i) => {
+      offersToShow.forEach((offer, i) => {
         markers.push(new Marker({
           lat: offer.location.latitude,
           lng: offer.location.longitude,
-        }));
+        }).on('click', () => onMarkerClick(offer.id)));
 
         markers[i].setIcon(offer.id === activeOfferId ? currentCustomIcon : defaultCustomIcon);
         markersGroup.addLayer(markers[i]);
@@ -50,9 +67,9 @@ function Map({ containerClassName, activeOfferId }: MapProps): JSX.Element {
 
       markersGroup.addTo(map);
     }
-  }, [map, offers, activeOfferId, currentCity]);
+  }, [map, offersToShow, activeOfferId, currentCity]);
 
   return <section className={`${containerClassName} map`} ref={mapRef}></section>;
 }
 
-export default Map;
+export default InteractiveMap;

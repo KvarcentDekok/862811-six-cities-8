@@ -1,23 +1,37 @@
-import React, { FormEvent, useRef } from 'react';
+import React, { FormEvent, MouseEvent, useRef } from 'react';
 import { AuthData } from '../../types/auth-data';
 import { login } from '../../store/user/user';
 import { useDispatch } from 'react-redux';
 import browserHistory from '../../browser-history';
-import { AppRoute, ErrorMesssage } from '../../const';
+import { AppRoute, ErrorMesssage, CITIES } from '../../const';
 import { AppDispatch } from '../../store/store';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
+import { getRandomInteger } from '../../utils/utils';
+import { Link } from 'react-router-dom';
+import { changeCity } from '../../store/main/main';
+
+const INVALID_PASSWORD_MESSAGE = 'Password must be at least one number and one letter';
 
 function SignInScreen(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch<AppDispatch>();
+  const randomCity = CITIES[getRandomInteger(0, CITIES.length - 1)];
 
   const onSubmit = async (authData: AuthData) => {
     await dispatch(login(authData))
       .then(unwrapResult)
       .then(() => browserHistory.push(AppRoute.Main))
       .catch(() => toast.error(ErrorMesssage.LoginError));
+  };
+
+  const validatePassword = (evt: MouseEvent<HTMLButtonElement>) => {
+    if (passwordRef.current?.checkValidity() === false && passwordRef.current?.validity.patternMismatch) {
+      passwordRef.current?.setCustomValidity(INVALID_PASSWORD_MESSAGE);
+    } else {
+      passwordRef.current?.setCustomValidity('');
+    }
   };
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
@@ -56,16 +70,25 @@ function SignInScreen(): JSX.Element {
               </div>
               <div className="login__input-wrapper form__input-wraFpper">
                 <label htmlFor='password' className="visually-hidden">Password</label>
-                <input id='password' className="login__input form__input" type="password" name="password" placeholder="Password" required ref={passwordRef}/>
+                <input
+                  id='password'
+                  className="login__input form__input"
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  required
+                  ref={passwordRef}
+                  pattern='(?=.*\d)(?=.*[a-z]).*'
+                />
               </div>
-              <button className="login__submit form__submit button" type="submit">Sign in</button>
+              <button className="login__submit form__submit button" type="submit" onClick={validatePassword}>Sign in</button>
             </form>
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
-              </a>
+              <Link className="locations__item-link" to={AppRoute.Main} onClick={() => dispatch(changeCity(randomCity))}>
+                <span>{randomCity.name}</span>
+              </Link>
             </div>
           </section>
         </div>

@@ -93,3 +93,10 @@ export enum ErrorMesssage {
   LoginError = 'Failed to login',
   LogoutError = 'Failed to logout'
 }
+
+export const OfferType: Map<string, string> = new Map([
+  ['apartment', 'Apartment'],
+  ['room', 'Private Room'],
+  ['house', 'House'],
+  ['hotel', 'Hotel'],
+]);

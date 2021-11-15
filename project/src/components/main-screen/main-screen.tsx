@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import PlacesList from '../places-list/places-list';
 import Header from '../header/header';
-import Map from '../map/map';
+import InteractiveMap from '../interactive-map/interactive-map';
 import CitiesList from '../cities-list/cities-list';
 import { CITIES } from '../../const';
 import { useSelector } from 'react-redux';
@@ -46,7 +46,7 @@ function MainScreen(): JSX.Element {
                 <PlacesList onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave} variant='cities'/>
               </section>
               <div className="cities__right-section">
-                <Map containerClassName='cities__map' activeOfferId={activeOfferId}/>
+                <InteractiveMap containerClassName='cities__map' activeOfferId={activeOfferId}/>
               </div>
             </div>
             :

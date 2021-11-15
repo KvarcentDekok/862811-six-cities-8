@@ -1,10 +1,10 @@
 import { Offer } from '../../types/offer';
 import { useParams } from 'react-router';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
-import { getPercentageOfRating, capitalize } from '../../utils/utils';
+import { getPercentageOfRating } from '../../utils/utils';
 import Header from '../header/header';
 import Reviews from '../reviews/reviews';
-import Map from '../map/map';
+import InteractiveMap from '../interactive-map/interactive-map';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeCity } from '../../store/main/main';
 import { loadOffersNearby, loadReviews } from '../../store/data/data';
@@ -13,8 +13,11 @@ import { useEffect } from 'react';
 import { getAllOffers } from '../../store/data/selectors';
 import { AppDispatch } from '../../store/store';
 import { toast } from 'react-toastify';
-import { ErrorMesssage } from '../../const';
+import { ErrorMesssage, OfferType } from '../../const';
 import { unwrapResult } from '@reduxjs/toolkit';
+import BookmarkButton from '../bookmark-button/bookmark-button';
+
+const IMAGES_MAX_COUNT = 6;
 
 type PossibleOffer = Offer | undefined;
 
@@ -26,6 +29,7 @@ function RoomScreen(): JSX.Element {
 
   useEffect(() => {
     if (offer) {
+      window.scrollTo(0, 0);
       dispatch(changeCity(offer.city));
       dispatch(loadOffersNearby(String(offer.id)))
         .then(unwrapResult)
@@ -63,7 +67,7 @@ function RoomScreen(): JSX.Element {
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {images.map((image) => (
+              {images.slice(0, IMAGES_MAX_COUNT).map((image) => (
                 <div key={image} className="property__image-wrapper">
                   <img
                     className="property__image"
@@ -83,21 +87,7 @@ function RoomScreen(): JSX.Element {
               )}
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
-                <button
-                  className={`property__bookmark-button ${
-                    isFavorite && 'property__bookmark-button--active'
-                  } button`}
-                  type="button"
-                >
-                  <svg
-                    className="property__bookmark-icon"
-                    width="31"
-                    height="33"
-                  >
-                    <use xlinkHref="#icon-bookmark"></use>
-                  </svg>
-                  <span className="visually-hidden">To bookmarks</span>
-                </button>
+                <BookmarkButton isFavorite={isFavorite} id={Number(id)} className='property' />
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
@@ -110,7 +100,7 @@ function RoomScreen(): JSX.Element {
               </div>
               <ul className="property__features">
                 <li className="property__feature property__feature--entire">
-                  {capitalize(type)}
+                  {OfferType.get(type)}
                 </li>
                 <li className="property__feature property__feature--bedrooms">
                   {bedrooms} Bedrooms
@@ -157,7 +147,7 @@ function RoomScreen(): JSX.Element {
               <Reviews offerId={id}/>
             </div>
           </div>
-          <Map containerClassName='property__map'/>
+          <InteractiveMap containerClassName='property__map' activeOfferId={Number(id)}/>
         </section>
         <div className="container">
           <section className="near-places places">

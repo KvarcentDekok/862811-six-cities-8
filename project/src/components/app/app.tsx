@@ -1,5 +1,5 @@
-import {Switch, Route} from 'react-router-dom';
-import {AppRoute} from '../../const';
+import {Switch, Route, Redirect} from 'react-router-dom';
+import {AppRoute, AuthorizationStatus} from '../../const';
 import MainScreen from '../main-screen/main-screen';
 import FavoritesScreen from '../favorites-screen/favorites-screen';
 import RoomScreen from '../room-screen/room-screen';
@@ -10,9 +10,11 @@ import { useSelector } from 'react-redux';
 import { SpinnerDotted } from 'spinners-react';
 import { CSSProperties } from 'react';
 import { getLoadingFlag } from '../../store/data/selectors';
+import { getAuthorizationStatus } from '../../store/user/selectors';
 
 function App(): JSX.Element {
   const isLoading = useSelector(getLoadingFlag);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
 
   if (isLoading) {
     const spinnerStyles: CSSProperties = {
@@ -36,7 +38,9 @@ function App(): JSX.Element {
         <RoomScreen/>
       </Route>
       <Route exact path={AppRoute.SignIn}>
-        <SignInScreen/>
+        {authorizationStatus === AuthorizationStatus.Auth
+          ? <Redirect to={AppRoute.Main} />
+          : <SignInScreen/>}
       </Route>
       <PrivateRoute
         exact
