@@ -10,12 +10,13 @@ import { changeCity } from '../../store/main/main';
 import { loadOffersNearby, loadReviews } from '../../store/data/data';
 import PlacesList from '../places-list/places-list';
 import { useEffect } from 'react';
-import { getAllOffers } from '../../store/data/selectors';
+import { getAllOffers, getOffersNearby } from '../../store/data/selectors';
 import { AppDispatch } from '../../store/store';
 import { toast } from 'react-toastify';
 import { ErrorMesssage, OfferType } from '../../const';
 import { unwrapResult } from '@reduxjs/toolkit';
 import BookmarkButton from '../bookmark-button/bookmark-button';
+import browserHistory from '../../browser-history';
 
 const IMAGES_MAX_COUNT = 6;
 
@@ -26,10 +27,14 @@ function RoomScreen(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const offer: PossibleOffer = offers.find((item) => item.id === Number(id));
   const dispatch = useDispatch<AppDispatch>();
+  const offersNearby = useSelector(getOffersNearby);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [offer]);
 
   useEffect(() => {
     if (offer) {
-      window.scrollTo(0, 0);
       dispatch(changeCity(offer.city));
       dispatch(loadOffersNearby(String(offer.id)))
         .then(unwrapResult)
@@ -58,6 +63,16 @@ function RoomScreen(): JSX.Element {
     title,
     type,
   } = offer;
+
+  const offersToShow = offersNearby.slice();
+
+  offersToShow.splice(-1, 0, offer);
+
+  const points = offersToShow.map((offerToShow) => ({
+    latitude: offerToShow.location.latitude,
+    longitude: offerToShow.location.longitude,
+    id: offerToShow.id,
+  }));
 
   return (
     <div className="page">
@@ -147,7 +162,13 @@ function RoomScreen(): JSX.Element {
               <Reviews offerId={id}/>
             </div>
           </div>
-          <InteractiveMap containerClassName='property__map' activeOfferId={Number(id)}/>
+          <InteractiveMap
+            containerClassName='property__map'
+            points={points}
+            activePointId={Number(id)}
+            center={offer.city.location}
+            onMarkerClick={(offerId) => browserHistory.push(`/offer/${offerId}`)}
+          />
         </section>
         <div className="container">
           <section className="near-places places">

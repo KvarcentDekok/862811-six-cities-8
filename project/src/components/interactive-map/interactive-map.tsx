@@ -3,14 +3,21 @@ import leaflet, { LayerGroup, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import useMap from '../../hooks/use-map';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
-import { useSelector } from 'react-redux';
-import { getOffersByCity, getOffersNearby } from '../../store/data/selectors';
-import { getCity } from '../../store/main/selectors';
-import browserHistory from '../../browser-history';
+import classNames from 'classnames';
+import { Location } from '../../types/offer';
+
+type Point = {
+  latitude: number,
+  longitude: number,
+  id: number
+}
 
 type MapProps = {
   containerClassName: 'cities__map' | 'property__map',
-  activeOfferId: number
+  points: Point[],
+  activePointId: number,
+  center: Location,
+  onMarkerClick: (id: number) => void
 };
 
 const defaultCustomIcon = leaflet.icon({
@@ -27,27 +34,13 @@ const currentCustomIcon = leaflet.icon({
 
 const markersGroup: LayerGroup = leaflet.layerGroup([]);
 
-function InteractiveMap({ containerClassName, activeOfferId }: MapProps): JSX.Element {
-  const offersByCity = useSelector(getOffersByCity);
-  const offersNearby = useSelector(getOffersNearby);
-  const currentCity = useSelector(getCity);
+function InteractiveMap({ containerClassName, points, activePointId, center, onMarkerClick }: MapProps): JSX.Element {
   const mapRef = useRef(null);
-  const map = useMap(mapRef, currentCity);
-
-  let offersToShow = offersByCity;
-
-  if (containerClassName === 'property__map') {
-    const currentOffer = offersByCity.find((offer) => offer.id === activeOfferId);
-
-    if (currentOffer) {
-      offersToShow = offersNearby.slice();
-      offersToShow.splice(-1, 0, currentOffer);
-    }
-  }
-
-  function onMarkerClick(offerId: number) {
-    browserHistory.push(`/offer/${offerId}`);
-  }
+  const map = useMap(mapRef, center);
+  const mapClassName = classNames({
+    [containerClassName]: true,
+    'map': true,
+  });
 
   useEffect(() => {
     if (map) {
@@ -55,21 +48,21 @@ function InteractiveMap({ containerClassName, activeOfferId }: MapProps): JSX.El
 
       markersGroup?.clearLayers();
 
-      offersToShow.forEach((offer, i) => {
+      points.forEach((location, i) => {
         markers.push(new Marker({
-          lat: offer.location.latitude,
-          lng: offer.location.longitude,
-        }).on('click', () => onMarkerClick(offer.id)));
+          lat: location.latitude,
+          lng: location.longitude,
+        }).on('click', () => onMarkerClick(location.id)));
 
-        markers[i].setIcon(offer.id === activeOfferId ? currentCustomIcon : defaultCustomIcon);
+        markers[i].setIcon(location.id === activePointId ? currentCustomIcon : defaultCustomIcon);
         markersGroup.addLayer(markers[i]);
       });
 
       markersGroup.addTo(map);
     }
-  }, [map, offersToShow, activeOfferId, currentCity]);
+  }, [map, points, activePointId, onMarkerClick]);
 
-  return <section className={`${containerClassName} map`} ref={mapRef}></section>;
+  return <section className={mapClassName} ref={mapRef}></section>;
 }
 
 export default InteractiveMap;

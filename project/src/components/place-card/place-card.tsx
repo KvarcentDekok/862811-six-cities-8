@@ -3,6 +3,7 @@ import { Offer } from '../../types/offer';
 import { Link } from 'react-router-dom';
 import { getPercentageOfRating, capitalize } from '../../utils/utils';
 import BookmarkButton from '../bookmark-button/bookmark-button';
+import classNames from 'classnames';
 
 type PlaceCardProps = {
   offer: Offer,
@@ -31,28 +32,28 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave, variant}: PlaceCardProps)
 
   switch (variant) {
     case 'cities':
-      conatainerClassName = 'cities__place-card';
-      imageWrapperClassName = 'cities__image-wrapper';
+      conatainerClassName = classNames('cities__place-card', 'place-card');
+      imageWrapperClassName = classNames('cities__image-wrapper', 'place-card__image-wrapper');
       imageWidth = '260';
       imageHeight = '200';
       break;
     case 'near-places':
-      conatainerClassName = 'near-places__card';
-      imageWrapperClassName = 'near-places__image-wrapper';
+      conatainerClassName = classNames('near-places__card', 'place-card');
+      imageWrapperClassName = classNames('near-places__image-wrapper', 'place-card__image-wrapper');
       imageWidth = '260';
       imageHeight = '200';
       break;
     case 'favorites':
-      conatainerClassName = 'favorites__card';
-      imageWrapperClassName = 'favorites__image-wrapper';
-      cardInfoClassName = 'favorites__card-info';
+      conatainerClassName = classNames('favorites__card', 'place-card');
+      imageWrapperClassName = classNames('favorites__image-wrapper', 'place-card__image-wrapper');
+      cardInfoClassName = classNames('favorites__card-info', 'place-card__info');
       imageWidth = '150';
       imageHeight = '110';
   }
 
   return (
     <article
-      className={`${conatainerClassName} place-card`}
+      className={conatainerClassName}
       onMouseEnter={onPlaceHover ? () => onPlaceHover(id) : undefined}
       onMouseLeave={onPlaceLeave ? () => onPlaceLeave() : undefined}
     >
@@ -62,12 +63,12 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave, variant}: PlaceCardProps)
           <span>Premium</span>
         </div>
       }
-      <div className={`${imageWrapperClassName} place-card__image-wrapper`}>
+      <div className={imageWrapperClassName}>
         <Link to={`/offer/${id}`}>
           <img className="place-card__image" src={previewImage} width={imageWidth} height={imageHeight} alt="Place image"/>
         </Link>
       </div>
-      <div className={`${cardInfoClassName} place-card__info`}>
+      <div className={cardInfoClassName}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>

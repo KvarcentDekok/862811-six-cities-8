@@ -2,8 +2,7 @@ import { useSelector } from 'react-redux';
 import { getReviews } from '../../store/data/selectors';
 import ReviewForm from '../review-form/review-form';
 import ReviewComponent from '../review/review';
-import { getAuthorizationStatus } from '../../store/user/selectors';
-import { AuthorizationStatus } from '../../const';
+import { getLoggedInFlag } from '../../store/user/selectors';
 
 type ReviewsProps = {
   offerId: string
@@ -11,7 +10,7 @@ type ReviewsProps = {
 
 function Reviews({offerId}: ReviewsProps): JSX.Element {
   const reviews = useSelector(getReviews);
-  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const isLoggedIn = useSelector(getLoggedInFlag);
 
   function renderReviews() {
     return reviews.map((review) => (
@@ -27,7 +26,7 @@ function Reviews({offerId}: ReviewsProps): JSX.Element {
       <ul className="reviews__list">
         {renderReviews()}
       </ul>
-      {authorizationStatus === AuthorizationStatus.Auth && <ReviewForm offerId={offerId} />}
+      {isLoggedIn && <ReviewForm offerId={offerId} />}
     </section>
   );
 }

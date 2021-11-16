@@ -1,11 +1,11 @@
 import { MutableRefObject, useEffect, useState } from 'react';
 import { Map, TileLayer } from 'leaflet';
-import { City } from '../types/offer';
+import { Location } from '../types/offer';
 import leaflet from 'leaflet';
 
 function useMap(
   mapRef: MutableRefObject<HTMLElement | null>,
-  currentCity: City,
+  center: Location,
 ): Map | null {
   const [map, setMap] = useState<Map | null>(null);
 
@@ -18,22 +18,22 @@ function useMap(
       },
     );
 
-    map?.flyTo([currentCity.location.latitude, currentCity.location.longitude]);
+    map?.flyTo([center.latitude, center.longitude]);
 
     if (mapRef.current !== null && map === null) {
       const instance = leaflet.map(mapRef.current, {
         center: {
-          lat: currentCity.location.latitude,
-          lng: currentCity.location.longitude,
+          lat: center.latitude,
+          lng: center.longitude,
         },
-        zoom: currentCity.location.zoom,
+        zoom: center.zoom,
       });
 
       instance.addLayer(layer);
 
       setMap(instance);
     }
-  }, [mapRef, map, currentCity]);
+  }, [mapRef, map, center]);
 
   return map;
 }

@@ -9,7 +9,7 @@ describe('Hook: useMap', () => {
 
   it('should return leaflet map', () => {
     const {result} = renderHook(() =>
-      useMap(mockRef, CITIES[0]),
+      useMap(mockRef, CITIES[0].location),
     );
 
     const map = result.current;

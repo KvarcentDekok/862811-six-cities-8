@@ -9,11 +9,17 @@ import { getOffersByCity } from '../../store/data/selectors';
 import { getCity } from '../../store/main/selectors';
 import PlacesSorting from '../places-sorting/places-sorting';
 import CitiesContainerEmpty from '../cities-container-empty/cities-container-empty';
+import browserHistory from '../../browser-history';
 
 function MainScreen(): JSX.Element {
   const offers = useSelector(getOffersByCity);
   const currentCity = useSelector(getCity);
   const [activeOfferId, setActiveOfferId] = useState(0);
+  const points = offers.map((offer) => ({
+    latitude: offer.location.latitude,
+    longitude: offer.location.longitude,
+    id: offer.id,
+  }));
 
   const onPlaceHover = useCallback(
     (id: number) => setActiveOfferId(id),
@@ -46,7 +52,13 @@ function MainScreen(): JSX.Element {
                 <PlacesList onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave} variant='cities'/>
               </section>
               <div className="cities__right-section">
-                <InteractiveMap containerClassName='cities__map' activeOfferId={activeOfferId}/>
+                <InteractiveMap
+                  containerClassName='cities__map'
+                  points={points}
+                  activePointId={activeOfferId}
+                  center={currentCity.location}
+                  onMarkerClick={(offerId) => browserHistory.push(`/offer/${offerId}`)}
+                />
               </div>
             </div>
             :

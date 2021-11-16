@@ -1,11 +1,12 @@
 import { unwrapResult } from '@reduxjs/toolkit';
+import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import browserHistory from '../../browser-history';
-import { AppRoute, AuthorizationStatus, ErrorMesssage } from '../../const';
+import { AppRoute, ErrorMesssage } from '../../const';
 import { changeFavoriteStatus } from '../../store/data/data';
 import { AppDispatch } from '../../store/store';
-import { getAuthorizationStatus } from '../../store/user/selectors';
+import { getLoggedInFlag } from '../../store/user/selectors';
 
 type BookmarkButtonProps = {
   isFavorite: boolean,
@@ -15,12 +16,17 @@ type BookmarkButtonProps = {
 
 function BookmarkButton({isFavorite, id, className}: BookmarkButtonProps):JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
-  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const isLoggedIn = useSelector(getLoggedInFlag);
+  const buttonClassName = classNames({
+    [`${className}__bookmark-button`]: true,
+    [`${className}__bookmark-button--active`]: isFavorite,
+    'button': true,
+  });
 
   function onBookmarkClick() {
     const status = Number(!isFavorite);
 
-    if (authorizationStatus === AuthorizationStatus.Auth) {
+    if (isLoggedIn) {
       dispatch(changeFavoriteStatus({status, offerId: String(id)}))
         .then(unwrapResult)
         .catch(() => toast.error(status ? ErrorMesssage.AddToFavoriteError : ErrorMesssage.RemoveFromFavoriteError));
@@ -31,9 +37,7 @@ function BookmarkButton({isFavorite, id, className}: BookmarkButtonProps):JSX.El
 
   return (
     <button
-      className={`${className}__bookmark-button ${
-        isFavorite && `${className}__bookmark-button--active`
-      } button`}
+      className={buttonClassName}
       type="button"
       onClick={onBookmarkClick}
     >
@@ -42,7 +46,7 @@ function BookmarkButton({isFavorite, id, className}: BookmarkButtonProps):JSX.El
         width={className === 'property' ? '31' : '18'}
         height={className === 'property' ? '33' : '19'}
       >
-        <use xlinkHref="#icon-bookmark"></use>
+        <use href="#icon-bookmark"></use>
       </svg>
       <span className="visually-hidden">To bookmarks</span>
     </button>

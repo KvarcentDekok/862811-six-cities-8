@@ -1,16 +1,16 @@
 import React, { memo, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus, ErrorMesssage } from '../../const';
+import { AppRoute, ErrorMesssage } from '../../const';
 import { AppDispatch } from '../../store/store';
-import { getAuthorizationStatus, getAuthInfo } from '../../store/user/selectors';
+import { getAuthInfo, getLoggedInFlag } from '../../store/user/selectors';
 import { logout } from '../../store/user/user';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import browserHistory from '../../browser-history';
 
 function Header(): JSX.Element {
-  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const isLoggedIn = useSelector(getLoggedInFlag);
   const authInfo = useSelector(getAuthInfo);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -39,7 +39,7 @@ function Header(): JSX.Element {
           </div>
           <nav className="header__nav">
             <ul className="header__nav-list">
-              {authorizationStatus === AuthorizationStatus.Auth &&
+              {isLoggedIn &&
                   <>
                     <li className="header__nav-item user">
                       <Link
@@ -60,7 +60,7 @@ function Header(): JSX.Element {
                       </a>
                     </li>
                   </>}
-              {authorizationStatus !== AuthorizationStatus.Auth &&
+              {!isLoggedIn &&
                   <li className="header__nav-item user">
                     <Link
                       className="header__nav-link header__nav-link--profile"
