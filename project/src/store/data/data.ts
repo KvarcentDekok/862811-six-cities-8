@@ -41,7 +41,7 @@ const loadReviews = createAsyncThunk(
 );
 
 const comment = createAsyncThunk(
-  'user/comment',
+  'data/comment',
   async ({commentData, offerId}: CommentParams) => {
     const {data} = await api.post(APIRoute.Comment.replace(':hotel_id', offerId), commentData);
     return data;
@@ -49,7 +49,7 @@ const comment = createAsyncThunk(
 );
 
 const changeFavoriteStatus = createAsyncThunk(
-  'user/changeFavoriteStatus',
+  'data/changeFavoriteStatus',
   async ({status, offerId}: ChangeFavoriteStatusParams) => {
     const {data} = await api.post(APIRoute.Favorite.replace(':hotel_id', offerId).replace(':status', String(status)));
     return data;
@@ -57,7 +57,7 @@ const changeFavoriteStatus = createAsyncThunk(
 );
 
 const loadFavoriteOffers = createAsyncThunk(
-  'user/loadFavoriteOffers',
+  'data/loadFavoriteOffers',
   async () => {
     const {data} = await api.get(APIRoute.FavoriteOffers);
     return data;
@@ -115,6 +115,12 @@ const dataSlice = createSlice({
           const offerIndexFavorite = state.favoriteOffers.findIndex((offer) => offer.id === id);
 
           state.favoriteOffers.splice(offerIndexFavorite, 1);
+        }
+
+        if (state.offersNearby.length) {
+          const offerIndexNearby = state.offersNearby.findIndex((offer) => offer.id === id);
+
+          state.offersNearby[offerIndexNearby] = adaptToClientOffers([action.payload])[0];
         }
       })
       .addCase(loadFavoriteOffers.fulfilled, (state, action) => {

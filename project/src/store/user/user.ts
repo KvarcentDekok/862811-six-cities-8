@@ -1,7 +1,6 @@
 import { UserState } from '../../types/state';
 import { AuthorizationStatus, APIRoute } from '../../const';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { saveToken, dropToken } from '../../services/token';
 import { api } from '../../services/api';
 import { AuthData } from '../../types/auth-data';
 
@@ -54,9 +53,8 @@ const userSlice = createSlice({
         state.authInfo = null;
       })
       .addCase(login.fulfilled, (state, action) => {
-        const {token, avatar_url: avatarUrl, email} = action.payload;
+        const {avatar_url: avatarUrl, email} = action.payload;
 
-        saveToken(token);
         state.authorizationStatus = AuthorizationStatus.Auth;
         state.authInfo = {
           avatarUrl,
@@ -64,7 +62,6 @@ const userSlice = createSlice({
         };
       })
       .addCase(logout.fulfilled, (state) => {
-        dropToken();
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.authInfo = null;
       });

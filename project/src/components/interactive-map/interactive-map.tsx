@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import leaflet, { LayerGroup, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import useMap from '../../hooks/use-map';
-import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
 import classNames from 'classnames';
 import { Location } from '../../types/offer';
+import { UrlMarker } from '../../const';
 
 type Point = {
   latitude: number,
@@ -21,13 +21,13 @@ type MapProps = {
 };
 
 const defaultCustomIcon = leaflet.icon({
-  iconUrl: URL_MARKER_DEFAULT,
+  iconUrl: UrlMarker.Default,
   iconSize: [27, 39],
   iconAnchor: [13.5, 39],
 });
 
 const currentCustomIcon = leaflet.icon({
-  iconUrl: URL_MARKER_CURRENT,
+  iconUrl: UrlMarker.Current,
   iconSize: [27, 39],
   iconAnchor: [13.5, 39],
 });

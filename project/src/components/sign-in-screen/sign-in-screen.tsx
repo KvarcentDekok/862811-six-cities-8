@@ -1,5 +1,4 @@
 import React, { FormEvent, MouseEvent, useRef } from 'react';
-import { AuthData } from '../../types/auth-data';
 import { login } from '../../store/user/user';
 import { useDispatch } from 'react-redux';
 import browserHistory from '../../browser-history';
@@ -10,6 +9,7 @@ import { toast } from 'react-toastify';
 import { getRandomInteger } from '../../utils/utils';
 import { Link } from 'react-router-dom';
 import { changeCity } from '../../store/main/main';
+import { saveToken } from '../../services/token';
 
 const INVALID_PASSWORD_MESSAGE = 'Password must be at least one number and one letter';
 
@@ -19,13 +19,6 @@ function SignInScreen(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const randomCity = CITIES[getRandomInteger(0, CITIES.length - 1)];
 
-  const onSubmit = async (authData: AuthData) => {
-    await dispatch(login(authData))
-      .then(unwrapResult)
-      .then(() => browserHistory.push(AppRoute.Main))
-      .catch(() => toast.error(ErrorMesssage.LoginError));
-  };
-
   const validatePassword = (evt: MouseEvent<HTMLButtonElement>) => {
     if (passwordRef.current?.checkValidity() === false && passwordRef.current?.validity.patternMismatch) {
       passwordRef.current?.setCustomValidity(INVALID_PASSWORD_MESSAGE);
@@ -34,14 +27,22 @@ function SignInScreen(): JSX.Element {
     }
   };
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const handleSubmitLogin = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     if (loginRef.current !== null && passwordRef.current !== null) {
-      onSubmit({
+      const authData = {
         email: loginRef.current.value,
         password: passwordRef.current.value,
-      });
+      };
+
+      await dispatch(login(authData))
+        .then(unwrapResult)
+        .then(({token}) => {
+          saveToken(token);
+          browserHistory.push(AppRoute.Main);
+        })
+        .catch(() => toast.error(ErrorMesssage.LoginError));
     }
   };
 
@@ -51,9 +52,9 @@ function SignInScreen(): JSX.Element {
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <a className="header__logo-link" href="main.html">
+              <Link className="header__logo-link" to={AppRoute.Main}>
                 <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -63,7 +64,7 @@ function SignInScreen(): JSX.Element {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <form className="login__form form" action="#" method="post" onSubmit={handleSubmit}>
+            <form className="login__form form" action="#" method="post" onSubmit={handleSubmitLogin}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label htmlFor='email' className="visually-hidden">E-mail</label>
                 <input id='email' className="login__input form__input" type="email" name="email" placeholder="Email" required ref={loginRef}/>

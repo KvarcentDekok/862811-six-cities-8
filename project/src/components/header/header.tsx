@@ -8,17 +8,21 @@ import { logout } from '../../store/user/user';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import browserHistory from '../../browser-history';
+import { dropToken } from '../../services/token';
 
 function Header(): JSX.Element {
   const isLoggedIn = useSelector(getLoggedInFlag);
   const authInfo = useSelector(getAuthInfo);
   const dispatch = useDispatch<AppDispatch>();
 
-  function onSignOutClick(evt: MouseEvent<HTMLAnchorElement>) {
+  function handleSignOutClick(evt: MouseEvent<HTMLAnchorElement>) {
     evt.preventDefault();
     dispatch(logout())
       .then(unwrapResult)
-      .then(() => browserHistory.push(AppRoute.SignIn))
+      .then(() => {
+        dropToken();
+        browserHistory.push(AppRoute.SignIn);
+      })
       .catch(() => toast.error(ErrorMesssage.LogoutError));
   }
 
@@ -55,7 +59,7 @@ function Header(): JSX.Element {
                       </Link>
                     </li>
                     <li className="header__nav-item">
-                      <a className="header__nav-link" onClick={onSignOutClick} href=''>
+                      <a className="header__nav-link" onClick={handleSignOutClick} href=''>
                         <span className="header__signout">Sign out</span>
                       </a>
                     </li>

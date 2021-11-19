@@ -21,12 +21,12 @@ function MainScreen(): JSX.Element {
     id: offer.id,
   }));
 
-  const onPlaceHover = useCallback(
+  const handlePlaceHover = useCallback(
     (id: number) => setActiveOfferId(id),
     [],
   );
 
-  const onPlaceLeave = useCallback(
+  const handlePlaceLeave = useCallback(
     () => setActiveOfferId(0),
     [],
   );
@@ -49,7 +49,7 @@ function MainScreen(): JSX.Element {
                 <h2 className="visually-hidden">Places</h2>
                 <b className="places__found">{offers.length} places to stay in {currentCity.name}</b>
                 <PlacesSorting/>
-                <PlacesList onPlaceHover={onPlaceHover} onPlaceLeave={onPlaceLeave} variant='cities'/>
+                <PlacesList onPlaceHover={handlePlaceHover} onPlaceLeave={handlePlaceLeave} variant='cities'/>
               </section>
               <div className="cities__right-section">
                 <InteractiveMap

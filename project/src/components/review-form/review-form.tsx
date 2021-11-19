@@ -9,8 +9,10 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { ErrorMesssage } from '../../const';
 
-const MIN_REVIEW_LENGTH = 50;
-const MAX_REVIEW_LENGTH = 300;
+enum ReviewLength {
+  Min = 50,
+  Max = 300
+}
 
 type ReviewFormProps = {
   offerId: string
@@ -26,7 +28,7 @@ function ReviewForm({offerId}: ReviewFormProps): JSX.Element {
 
   const {rating, comment} = formControls;
 
-  async function onSubmitReviewForm(evt: FormEvent<HTMLFormElement>) {
+  async function handleSubmitReviewForm(evt: FormEvent<HTMLFormElement>) {
     evt.preventDefault();
 
     await dispatch(commentAction({commentData: formControls, offerId}))
@@ -35,7 +37,7 @@ function ReviewForm({offerId}: ReviewFormProps): JSX.Element {
       .catch(() => toast.error(ErrorMesssage.SendReviewError));
   }
 
-  function onChangeReview({target}: ChangeEvent<HTMLTextAreaElement>) {
+  function handleChangeReview({target}: ChangeEvent<HTMLTextAreaElement>) {
     setFormControls({
       ...formControls,
       comment: target.value,
@@ -66,7 +68,7 @@ function ReviewForm({offerId}: ReviewFormProps): JSX.Element {
 
   return (
     <form className="reviews__form form" action="#" method="post"
-      onSubmit={onSubmitReviewForm}
+      onSubmit={handleSubmitReviewForm}
     >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
@@ -74,18 +76,18 @@ function ReviewForm({offerId}: ReviewFormProps): JSX.Element {
       </div>
       <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved"
         value={comment}
-        onChange={onChangeReview}
+        onChange={handleChangeReview}
         disabled={isCommentSending}
-        maxLength={MAX_REVIEW_LENGTH}
+        maxLength={ReviewLength.Max}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
-          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">{MIN_REVIEW_LENGTH} characters</b>.
+          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">{ReviewLength.Min} characters</b>.
         </p>
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={(comment.length < MIN_REVIEW_LENGTH) || (rating === '') || isCommentSending}
+          disabled={(comment.length < ReviewLength.Min) || (rating === '') || isCommentSending}
         >
           Submit
         </button>

@@ -23,7 +23,7 @@ function BookmarkButton({isFavorite, id, className}: BookmarkButtonProps):JSX.El
     'button': true,
   });
 
-  function onBookmarkClick() {
+  function handleBookmarkClick() {
     const status = Number(!isFavorite);
 
     if (isLoggedIn) {
@@ -39,7 +39,7 @@ function BookmarkButton({isFavorite, id, className}: BookmarkButtonProps):JSX.El
     <button
       className={buttonClassName}
       type="button"
-      onClick={onBookmarkClick}
+      onClick={handleBookmarkClick}
     >
       <svg
         className={`${className}__bookmark-icon`}

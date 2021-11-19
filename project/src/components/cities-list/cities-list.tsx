@@ -12,7 +12,7 @@ function CitiesList({cities}: CitiesListProps): JSX.Element {
   const currentCity = useSelector(getCity);
   const dispatch = useDispatch();
 
-  const onChangeCity = (evt: MouseEvent<HTMLAnchorElement>, city: City) => {
+  const handleChangeCity = (evt: MouseEvent<HTMLAnchorElement>, city: City) => {
     evt.preventDefault();
     dispatch(changeCity(city));
   };
@@ -23,7 +23,7 @@ function CitiesList({cities}: CitiesListProps): JSX.Element {
         <a
           className={`locations__item-link tabs__item ${currentCity.name === city.name ? 'tabs__item--active': ''}`}
           href="#"
-          onClick={(evt) => onChangeCity(evt, city)}
+          onClick={(evt) => handleChangeCity(evt, city)}
         >
           <span>{city.name}</span>
         </a>

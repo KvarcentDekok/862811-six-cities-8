@@ -31,7 +31,7 @@ function RoomScreen(): JSX.Element {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [offer]);
+  }, [id]);
 
   useEffect(() => {
     if (offer) {

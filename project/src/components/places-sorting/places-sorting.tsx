@@ -12,7 +12,7 @@ function PlacesSorting (): JSX.Element {
   const sortingRef = useRef(null);
   const sortingVariants = getEnumValues(Sorting);
 
-  function onSortVariantClick(variant: Sorting, sortingElement: MutableRefObject<HTMLElement | null>) {
+  function handleSortVariantClick(variant: Sorting, sortingElement: MutableRefObject<HTMLElement | null>) {
     dispatch(changeSorting(variant));
     setIsOpened(false);
 
@@ -21,14 +21,14 @@ function PlacesSorting (): JSX.Element {
     }
   }
 
-  function onSortVariantKeyDown(evt: KeyboardEvent<HTMLLIElement>, variant: Sorting) {
+  function handleSortVariantKeyDown(evt: KeyboardEvent<HTMLLIElement>, variant: Sorting) {
     if (evt.key === 'Enter') {
       evt.preventDefault();
-      onSortVariantClick(variant, sortingRef);
+      handleSortVariantClick(variant, sortingRef);
     }
   }
 
-  function onSortTypeKeyDown(evt: KeyboardEvent<HTMLSpanElement>) {
+  function handleSortTypeKeyDown(evt: KeyboardEvent<HTMLSpanElement>) {
     if (evt.key === 'Enter') {
       evt.preventDefault();
       setIsOpened(!isOpened);
@@ -41,8 +41,8 @@ function PlacesSorting (): JSX.Element {
         key={variant}
         className={`places__option ${variant === currentSorting ? 'places__option--active' : ''}`}
         tabIndex={0}
-        onClick={() => onSortVariantClick(variant, sortingRef)}
-        onKeyDown={(evt) => onSortVariantKeyDown(evt, variant)}
+        onClick={() => handleSortVariantClick(variant, sortingRef)}
+        onKeyDown={(evt) => handleSortVariantKeyDown(evt, variant)}
       >
         {variant}
       </li>
@@ -56,7 +56,7 @@ function PlacesSorting (): JSX.Element {
         className="places__sorting-type"
         tabIndex={0}
         onClick={() => setIsOpened(!isOpened)}
-        onKeyDown={onSortTypeKeyDown}
+        onKeyDown={handleSortTypeKeyDown}
         ref={sortingRef}
       >
         {currentSorting}
