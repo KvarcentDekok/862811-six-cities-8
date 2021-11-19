@@ -7,7 +7,7 @@ import { getCommentSendingFlag } from '../../store/data/selectors';
 import { AppDispatch } from '../../store/store';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { ErrorMesssage } from '../../const';
+import { ErrorMessage } from '../../const';
 
 enum ReviewLength {
   Min = 50,
@@ -34,7 +34,7 @@ function ReviewForm({offerId}: ReviewFormProps): JSX.Element {
     await dispatch(commentAction({commentData: formControls, offerId}))
       .then(unwrapResult)
       .then(() => setFormControls({rating: '', comment: ''}))
-      .catch(() => toast.error(ErrorMesssage.SendReviewError));
+      .catch(() => toast.error(ErrorMessage.SendReviewError));
   }
 
   function handleChangeReview({target}: ChangeEvent<HTMLTextAreaElement>) {

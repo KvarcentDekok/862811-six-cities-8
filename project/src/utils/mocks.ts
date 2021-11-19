@@ -5,10 +5,11 @@ import { getISOString } from './utils';
 
 type FakeOfferParams = {
   cityName?: string,
-  isPremium?: boolean
+  isPremium?: boolean,
+  isFavorite?: boolean
 }
 
-export const makeFakeOffer = ({cityName, isPremium}: FakeOfferParams): OfferServer => ({
+export const makeFakeOffer = ({cityName, isPremium, isFavorite}: FakeOfferParams): OfferServer => ({
   'bedrooms': 4,
   'city': {
     'location': {
@@ -28,7 +29,7 @@ export const makeFakeOffer = ({cityName, isPremium}: FakeOfferParams): OfferServ
   },
   'id': datatype.number(),
   'images': new Array(4).fill(image.imageUrl()),
-  'is_favorite': datatype.boolean(),
+  'is_favorite': isFavorite !== undefined ? isFavorite : datatype.boolean(),
   'is_premium': isPremium !== undefined ? isPremium : datatype.boolean(),
   'location': {
     'latitude': Number(address.latitude()),

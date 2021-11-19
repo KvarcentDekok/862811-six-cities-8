@@ -1,8 +1,8 @@
-import React, { FormEvent, MouseEvent, useRef } from 'react';
+import React, { FormEvent, useRef } from 'react';
 import { login } from '../../store/user/user';
 import { useDispatch } from 'react-redux';
 import browserHistory from '../../browser-history';
-import { AppRoute, ErrorMesssage, CITIES } from '../../const';
+import { AppRoute, ErrorMessage, CITIES } from '../../const';
 import { AppDispatch } from '../../store/store';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
@@ -19,7 +19,7 @@ function SignInScreen(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const randomCity = CITIES[getRandomInteger(0, CITIES.length - 1)];
 
-  const validatePassword = (evt: MouseEvent<HTMLButtonElement>) => {
+  const validatePassword = () => {
     if (passwordRef.current?.checkValidity() === false && passwordRef.current?.validity.patternMismatch) {
       passwordRef.current?.setCustomValidity(INVALID_PASSWORD_MESSAGE);
     } else {
@@ -42,7 +42,7 @@ function SignInScreen(): JSX.Element {
           saveToken(token);
           browserHistory.push(AppRoute.Main);
         })
-        .catch(() => toast.error(ErrorMesssage.LoginError));
+        .catch(() => toast.error(ErrorMessage.LoginError));
     }
   };
 
@@ -69,7 +69,7 @@ function SignInScreen(): JSX.Element {
                 <label htmlFor='email' className="visually-hidden">E-mail</label>
                 <input id='email' className="login__input form__input" type="email" name="email" placeholder="Email" required ref={loginRef}/>
               </div>
-              <div className="login__input-wrapper form__input-wraFpper">
+              <div className="login__input-wrapper form__input-wrapper">
                 <label htmlFor='password' className="visually-hidden">Password</label>
                 <input
                   id='password'

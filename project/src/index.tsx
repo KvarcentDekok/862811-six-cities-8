@@ -9,11 +9,11 @@ import browserHistory from './browser-history';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { store } from './store/store';
-import { ErrorMesssage } from './const';
+import { ErrorMessage } from './const';
 
 store.dispatch(checkAuth());
 store.dispatch(loadOffers())
-  .catch(() => toast.error(ErrorMesssage.NoOffers));
+  .catch(() => toast.error(ErrorMessage.NoOffers));
 
 ReactDOM.render(
   <React.StrictMode>

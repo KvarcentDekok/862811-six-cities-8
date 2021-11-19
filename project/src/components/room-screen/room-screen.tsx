@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 import { getAllOffers, getOffersNearby } from '../../store/data/selectors';
 import { AppDispatch } from '../../store/store';
 import { toast } from 'react-toastify';
-import { ErrorMesssage, OfferType } from '../../const';
+import { ErrorMessage, OfferType } from '../../const';
 import { unwrapResult } from '@reduxjs/toolkit';
 import BookmarkButton from '../bookmark-button/bookmark-button';
 import browserHistory from '../../browser-history';
@@ -38,10 +38,10 @@ function RoomScreen(): JSX.Element {
       dispatch(changeCity(offer.city));
       dispatch(loadOffersNearby(String(offer.id)))
         .then(unwrapResult)
-        .catch(() => toast.error(ErrorMesssage.NoOffersNearby));
+        .catch(() => toast.error(ErrorMessage.NoOffersNearby));
       dispatch(loadReviews(String(offer.id)))
         .then(unwrapResult)
-        .catch(() => toast.error(ErrorMesssage.NoReviews));
+        .catch(() => toast.error(ErrorMessage.NoReviews));
     }
   }, [dispatch, offer]);
 

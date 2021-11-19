@@ -20,5 +20,6 @@ export const getOffersByCity = createSelector(
 export const getLoadingFlag = (state: State): boolean => state[NameSpace.Data].isLoading;
 export const getCommentSendingFlag = (state: State): boolean => state[NameSpace.Data].isCommentSending;
 export const getOffersNearby = (state: State): Offer[] => state[NameSpace.Data].offersNearby;
-export const getReviews = (state: State): Review[] => sortReviews(state[NameSpace.Data].reviews.slice(0, MAX_REVIEWS_NUMBER));
+export const getReviews = (state: State): Review[] => sortReviews(state[NameSpace.Data].reviews.slice()).slice(0, MAX_REVIEWS_NUMBER);
+export const getReviewsNumber = (state: State): number => state[NameSpace.Data].reviews.length;
 export const getFavoriteOffers = (state: State): Offer[] => state[NameSpace.Data].favoriteOffers;

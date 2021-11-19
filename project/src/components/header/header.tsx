@@ -1,7 +1,7 @@
 import React, { memo, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AppRoute, ErrorMesssage } from '../../const';
+import { AppRoute, ErrorMessage } from '../../const';
 import { AppDispatch } from '../../store/store';
 import { getAuthInfo, getLoggedInFlag } from '../../store/user/selectors';
 import { logout } from '../../store/user/user';
@@ -23,7 +23,7 @@ function Header(): JSX.Element {
         dropToken();
         browserHistory.push(AppRoute.SignIn);
       })
-      .catch(() => toast.error(ErrorMesssage.LogoutError));
+      .catch(() => toast.error(ErrorMessage.LogoutError));
   }
 
   return (

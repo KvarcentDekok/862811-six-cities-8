@@ -10,7 +10,7 @@ import { getFavoriteOffers } from '../../store/data/selectors';
 import { AppDispatch } from '../../store/store';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { AppRoute, ErrorMesssage } from '../../const';
+import { AppRoute, ErrorMessage } from '../../const';
 import { Link } from 'react-router-dom';
 
 function FavoritesScreen(): JSX.Element {
@@ -19,7 +19,7 @@ function FavoritesScreen(): JSX.Element {
   useEffect(() => {
     dispatch(loadFavoriteOffers())
       .then(unwrapResult)
-      .catch(() => toast.error(ErrorMesssage.NoFavoriteOffers));
+      .catch(() => toast.error(ErrorMessage.NoFavoriteOffers));
   }, [dispatch]);
 
   const favoriteOffers = useSelector(getFavoriteOffers);

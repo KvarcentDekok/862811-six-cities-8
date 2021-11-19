@@ -85,7 +85,7 @@ export enum Sorting {
   TopRated = 'Top rated first'
 }
 
-export enum ErrorMesssage {
+export enum ErrorMessage {
   NoOffers = 'Failed to get offers',
   NoOffersNearby = 'Failed to get offers nearby',
   NoReviews = 'Failed to get reviews',

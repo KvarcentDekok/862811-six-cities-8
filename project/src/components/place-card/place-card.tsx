@@ -24,7 +24,7 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave, variant}: PlaceCardProps)
     type,
   } = offer;
 
-  let conatainerClassName = '';
+  let containerClassName = '';
   let imageWrapperClassName = '';
   let cardInfoClassName = '';
   let imageWidth = '';
@@ -32,19 +32,19 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave, variant}: PlaceCardProps)
 
   switch (variant) {
     case 'cities':
-      conatainerClassName = classNames('cities__place-card', 'place-card');
+      containerClassName = classNames('cities__place-card', 'place-card');
       imageWrapperClassName = classNames('cities__image-wrapper', 'place-card__image-wrapper');
       imageWidth = '260';
       imageHeight = '200';
       break;
     case 'near-places':
-      conatainerClassName = classNames('near-places__card', 'place-card');
+      containerClassName = classNames('near-places__card', 'place-card');
       imageWrapperClassName = classNames('near-places__image-wrapper', 'place-card__image-wrapper');
       imageWidth = '260';
       imageHeight = '200';
       break;
     case 'favorites':
-      conatainerClassName = classNames('favorites__card', 'place-card');
+      containerClassName = classNames('favorites__card', 'place-card');
       imageWrapperClassName = classNames('favorites__image-wrapper', 'place-card__image-wrapper');
       cardInfoClassName = classNames('favorites__card-info', 'place-card__info');
       imageWidth = '150';
@@ -53,7 +53,7 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave, variant}: PlaceCardProps)
 
   return (
     <article
-      className={conatainerClassName}
+      className={containerClassName}
       onMouseEnter={onPlaceHover ? () => onPlaceHover(id) : undefined}
       onMouseLeave={onPlaceLeave ? () => onPlaceLeave() : undefined}
     >
@@ -83,7 +83,7 @@ function PlaceCard({offer, onPlaceHover, onPlaceLeave, variant}: PlaceCardProps)
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`offer/${id}`}>{title}</Link>
+          <Link to={`/offer/${id}`}>{title}</Link>
         </h2>
         <p className="place-card__type">{capitalize(type)}</p>
       </div>

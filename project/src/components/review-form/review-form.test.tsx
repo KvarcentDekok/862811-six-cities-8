@@ -37,7 +37,7 @@ describe('Component: ReviewForm', () => {
     expect(getByDisplayValue(/review/i)).toBeInTheDocument();
   });
 
-  it('shouldn\'t disable controrls when comment not sending', () => {
+  it('shouldn\'t disable controls when comment not sending', () => {
     const history = createMemoryHistory();
     const store = mockStore({
       DATA: {isCommentSending: false},
@@ -58,7 +58,7 @@ describe('Component: ReviewForm', () => {
     expect(getByPlaceholderText('Tell how was your stay, what you like and what can be improved')).not.toBeDisabled();
   });
 
-  it('should disable controrls when comment sending', () => {
+  it('should disable controls when comment sending', () => {
     const history = createMemoryHistory();
     const store = mockStore({
       DATA: {isCommentSending: true},

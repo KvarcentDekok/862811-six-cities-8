@@ -12,7 +12,7 @@ type PlacesListProps = {
 function PlacesList({onPlaceHover, onPlaceLeave, variant}: PlacesListProps): JSX.Element {
   const offers = useSelector(variant === 'cities' ? getOffersByCity : getOffersNearby);
 
-  let conatainerClassName: string;
+  let containerClassName: string;
 
   function renderCards() {
     return offers.map((offer) => (
@@ -22,14 +22,14 @@ function PlacesList({onPlaceHover, onPlaceLeave, variant}: PlacesListProps): JSX
 
   switch (variant) {
     case 'cities':
-      conatainerClassName = 'cities__places-list';
+      containerClassName = 'cities__places-list';
       break;
     case 'near-places':
-      conatainerClassName = 'near-places__list';
+      containerClassName = 'near-places__list';
   }
 
   return (
-    <div className={`${conatainerClassName} places__list tabs__content`}>
+    <div className={`${containerClassName} places__list tabs__content`}>
       {renderCards()}
     </div>
   );

@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import browserHistory from '../../browser-history';
-import { AppRoute, ErrorMesssage } from '../../const';
+import { AppRoute, ErrorMessage } from '../../const';
 import { changeFavoriteStatus } from '../../store/data/data';
 import { AppDispatch } from '../../store/store';
 import { getLoggedInFlag } from '../../store/user/selectors';
@@ -29,7 +29,7 @@ function BookmarkButton({isFavorite, id, className}: BookmarkButtonProps):JSX.El
     if (isLoggedIn) {
       dispatch(changeFavoriteStatus({status, offerId: String(id)}))
         .then(unwrapResult)
-        .catch(() => toast.error(status ? ErrorMesssage.AddToFavoriteError : ErrorMesssage.RemoveFromFavoriteError));
+        .catch(() => toast.error(status ? ErrorMessage.AddToFavoriteError : ErrorMessage.RemoveFromFavoriteError));
     } else {
       browserHistory.push(AppRoute.SignIn);
     }
